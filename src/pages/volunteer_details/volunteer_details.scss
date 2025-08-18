@@ -6,7 +6,7 @@
     width: 100%;
     background-color: #F4F0EC; // لون الخلفية الثابت خلف الصورة
     background-image: url('../5.png');
-    background-repeat: no-repeat;
+    background-repeat: repeat;
     background-size: contain; // أو cover حسب حاجتك
     background-position: center; // لتوسيط الصورة
     color: #616161;
@@ -14,5 +14,6 @@
 
     .volunteer_detailsContainer{
               flex: 5;
+              margin-left: 250px
     }
 }

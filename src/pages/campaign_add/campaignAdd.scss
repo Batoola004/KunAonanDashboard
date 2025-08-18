@@ -1,18 +1,45 @@
-.campaignAdd{
-    display: flex;
-    width: 100%;
-    background-color: white;
-    color: #616161;
+.campaignAdd {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #F4F0EC; // لون الخلفية
+  background-image: url('../5.png');
+  background-repeat: repeat;
+  background-size: contain; // أو cover حسب الحاجة
+  background-position: center; // لتوسيط الصورة
+  color: #616161;
 
-    width: 100%;
-    background-color: #F4F0EC; // لون الخلفية الثابت خلف الصورة
-    background-image: url('../5.png');
-    background-repeat: no-repeat;
-    background-size: contain; // أو cover حسب حاجتك
-    background-position: center; // لتوسيط الصورة
-    color: #616161;
-    min-height: 100vh;
-    .campaignAddContainer{
-              flex: 5;
+  .campaignAddContainer {
+    flex: 5;
+    margin-left: 250px;
+    //padding: 20px;
+  }
+
+  .dateField {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+    width: 200px;
+
+    label {
+      margin-bottom: 6px;
+      font-weight: 500;
+      color: #333;
     }
+
+    input[type="date"] {
+      padding: 8px 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      background-color: #ffffff; // لون خلفية الحقل
+      color: #333;
+      cursor: pointer;
+
+      &:focus {
+        border-color: #218483ff;
+        outline: none;
+      }
+    }
+  }
 }

@@ -1,168 +1,227 @@
-import React from 'react'
-import Sidebar from '../../components/sidebar/Sidebar'
-import Navbar from '../../components/navbar/Navbar'
-import Filter from '../../components/filters/Filter'
-import EditDataBox from '../../components/editableDataBox/EditDataBox'
-import PeopleButton from '../../components/peopleButton/PeopleButton'
-import Datatable from '../../components/datatable/Datatable'; // استيراد جدول البيانات
-import './campaign_details.scss'
-import { useState } from 'react'
-import Box from '@mui/material/Box';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import Sidebar from '../../components/sidebar/Sidebar';
+import Navbar from '../../components/navbar/Navbar';
+import EditDataBox from '../../components/editableDataBox/EditDataBox';
+import PeopleButton from '../../components/peopleButton/PeopleButton';
+import Datatable from '../../components/datatable/Datatable';
+import './campaign_details.scss';
+import { Box, CircularProgress, Alert, Snackbar, Alert as MuiAlert } from '@mui/material';
+import api from '../../api/axios';
 
 const Campaign_details = () => {
-  const [activeFilter, setActiveFilter] = useState('all');
-  const [activeTable, setActiveTable] = useState(null); // حالة لتتبع الجدول النشط
+  const { id } = useParams();
+  const [campaign, setCampaign] = useState(null);
+  const [activeTable, setActiveTable] = useState(null);
+  const [tableRows, setTableRows] = useState([]);
+  const [tableTitle, setTableTitle] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [tableLoading, setTableLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [successMsg, setSuccessMsg] = useState('');
 
-  const filterButtons = [
-    {
-      text: "all",
-      value: "all",
-      color: "primary",
-      hoverColor: "#e3f2fd",
-      activeTextColor: "#ffffff",
-      onClick: () => setActiveFilter('all')
-    },
-    {
-      text: "Health",
-      value: "new",
-      color: "secondary",
-      hoverColor: "#f3e5f5",
-      activeTextColor: "#ffffff",
-      onClick: () => setActiveFilter('new')
-    },
-    {
-      text: "Build",
-      value: "popular",
-      color: "success",
-      hoverColor: "#e8f5e9",
-      activeTextColor: "#ffffff",
-      onClick: () => setActiveFilter('popular')
-    },
-    {
-      text: "Education",
-      value: "Education",
-      color: "primary",
-      hoverColor: "#e3f2fd",
-      activeTextColor: "#ffffff",
-      onClick: () => setActiveFilter('Education')
-    }
-  ];
-
-  // بيانات مختلفة لكل جدول
-  const tableData = {
-    beneficiaries: {
-      title: "Beneficiaries",
-      columns: [
-        { field: 'id', headerName: 'ID', width: 70 },
-        { field: 'name', headerName: 'Name', width: 150 },
-        { field: 'assistanceType', headerName: 'Assistance Type', width: 150 },
-        { field: 'status', headerName: 'Status', width: 120 }
-      ],
-      rows: [
-        { id: 1, name: 'Ahmed Mohamed', assistanceType: 'Financial Aid', status: 'Active' },
-        { id: 2, name: 'Fatima Ali', assistanceType: 'Food Supplies', status: 'Pending' }
-      ]
-    },
-    volunteers: {
-      title: "Volunteers",
-      columns: [
-        { field: 'id', headerName: 'ID', width: 70 },
-        { field: 'name', headerName: 'Name', width: 150 },
-        { field: 'skills', headerName: 'Skills', width: 200 },
-        { field: 'hours', headerName: 'Volunteer Hours', width: 120, type: 'number' }
-      ],
-      rows: [
-        { id: 1, name: 'Khalid Hassan', skills: 'Teaching, First Aid', hours: 45 },
-        { id: 2, name: 'Layla Ahmed', skills: 'Translation, Cooking', hours: 32 }
-      ]
-    },
-    donators: {
-      title: "Donators",
-      columns: [
-        { field: 'id', headerName: 'ID', width: 70 },
-        { field: 'name', headerName: 'Name', width: 150 },
-        { field: 'donationType', headerName: 'Donation Type', width: 150 },
-        { field: 'amount', headerName: 'Amount (SAR)', width: 120, type: 'number' }
-      ],
-      rows: [
-        { id: 1, name: 'Mohammed Saleh', donationType: 'Zakat', amount: 5000 },
-        { id: 2, name: 'Noura Abdullah', donationType: 'General Donation', amount: 2500 }
-      ]
+  // جلب بيانات الحملة
+  const fetchCampaignDetails = async () => {
+    if (!id) return;
+    setLoading(true);
+    try {
+      const response = await api.get(`/campaigns/${id}`); 
+      if (response.data?.data) {
+        const apiData = response.data.data;
+        setCampaign({
+          id: apiData.id,
+          title_en: apiData.title_en,
+          title_ar: apiData.title_ar,
+          description_en: apiData.description_en,
+          description_ar: apiData.description_ar,
+          target_amount: parseFloat(apiData.goal_amount),
+          collected_amount: parseFloat(apiData.collected_amount),
+          status: apiData.status, // archived أو active
+          image: apiData.image 
+                  ? `http://localhost:8000/storage/${apiData.image}` 
+                  : 'https://via.placeholder.com/300',
+          progress: Math.round(
+            (parseFloat(apiData.collected_amount) / parseFloat(apiData.goal_amount)) * 100
+          ),
+          start_date: apiData.start_date,
+          end_date: apiData.end_date,
+        });
+      } else {
+        setError('⚠️ لم يتم العثور على بيانات الحملة');
+      }
+    } catch (err) {
+      console.error('Error fetching campaign:', err);
+      setError('فشل تحميل تفاصيل الحملة');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleButtonClick = (type) => {
-    setActiveTable(type === activeTable ? null : type); // تبديل الجدول عند النقر
+  useEffect(() => {
+    fetchCampaignDetails();
+  }, [id]);
+
+  const handleButtonClick = async (type) => {
+    if (type === activeTable) {
+      setActiveTable(null);
+      return;
+    }
+
+    if (!id) return;
+    setActiveTable(type);
+    setTableLoading(true);
+    setTableRows([]);
+    setTableTitle('');
+
+    try {
+      let response;
+      if (type === 'beneficiaries') {
+        response = await api.get(`/campaigns/${id}/getBeneficiaries`);
+      } else if (type === 'volunteers') {
+        response = await api.get(`/campaigns/${id}/getVolunteers`);
+      } else if (type === 'donators') {
+        response = await api.get(`/campaigns/${id}/getDonators`);
+      }
+
+      const data = response.data?.data || [];
+      setTableRows(data.map((item, index) => ({ id: item.id || index, ...item })));
+
+      const titleMap = {
+        beneficiaries: 'المستفيدون',
+        volunteers: 'المتطوعون',
+        donators: 'المتبرعون',
+      };
+      setTableTitle(titleMap[type]);
+    } catch (err) {
+      console.error('Error fetching table data:', err);
+      setTableRows([]);
+    } finally {
+      setTableLoading(false);
+    }
   };
+
+  // تحديث بيانات الحملة
+  const handleUpdateCampaign = async (updatedData) => {
+    if (campaign?.status === 'archived') {
+      setError('❌ لا يمكن تعديل حملة مؤرشفة');
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      if (updatedData.title_en) formData.append('title_en', updatedData.title_en);
+      if (updatedData.title_ar) formData.append('title_ar', updatedData.title_ar);
+      if (updatedData.description_en) formData.append('description_en', updatedData.description_en);
+      if (updatedData.description_ar) formData.append('description_ar', updatedData.description_ar);
+      if (updatedData.image) formData.append('image', updatedData.image); // ملف جديد
+
+      const response = await api.put(`/campaigns/update/${id}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+
+      if (response.data?.status === 200) {
+        const apiData = response.data.data;
+        setCampaign({
+          id: apiData.id,
+          title_en: apiData.title_en,
+          title_ar: apiData.title_ar,
+          description_en: apiData.description_en,
+          description_ar: apiData.description_ar,
+          target_amount: parseFloat(apiData.goal_amount),
+          collected_amount: parseFloat(apiData.collected_amount),
+          status: apiData.status,
+          image: apiData.image 
+                  ? `http://localhost:8000/storage/${apiData.image}` 
+                  : 'https://via.placeholder.com/300',
+          progress: Math.round(
+            (parseFloat(apiData.collected_amount) / parseFloat(apiData.goal_amount)) * 100
+          ),
+          start_date: apiData.start_date,
+          end_date: apiData.end_date,
+        });
+        setSuccessMsg('تم تحديث الحملة بنجاح ✅');
+      }
+    } catch (err) {
+      console.error('Error updating campaign:', err);
+      setError('فشل تحديث الحملة ❌');
+    }
+  };
+
+  const tableColumnsMap = {
+    beneficiaries: [
+      { field: 'id', headerName: 'ID', width: 70 },
+      { field: 'name', headerName: 'الاسم', width: 150 },
+      { field: 'phone', headerName: 'الهاتف', width: 130 },
+    ],
+    volunteers: [
+      { field: 'id', headerName: 'ID', width: 70 },
+      { field: 'name', headerName: 'الاسم', width: 150 },
+      { field: 'skills', headerName: 'المهارات', width: 200 },
+    ],
+    donators: [
+      { field: 'id', headerName: 'ID', width: 70 },
+      { field: 'name', headerName: 'الاسم', width: 150 },
+      { field: 'amount', headerName: 'المبلغ', width: 120 },
+    ]
+  };
+
+  if (loading) return <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}><CircularProgress /></Box>;
+  if (error) return <Box sx={{ p: 3 }}><Alert severity="error">{error}</Alert></Box>;
+  if (!campaign) return <Box sx={{ p: 3 }}><Alert severity="warning">لم يتم العثور على الحملة</Alert></Box>;
 
   return (
-    <div className='campaignArchive'>
+    <div className='campaign_details'>
       <Sidebar />
-      <div className="campaignArchiveContainer">
+      <div className="campaign_detailsContainer">
         <Navbar />
-        <Filter 
-          buttons={filterButtons}
-          activeFilter={activeFilter}
-          spacing={2}
-          buttonProps={{
-            sx: {
-              minWidth: '120px',
-              fontSize: '0.875rem'
-            }
-          }}
-        />
-        <EditDataBox />
 
-        <Box sx={{ 
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: '16px',
-          backgroundColor: '#f5f5f5',
-          borderRadius: '4px',
-          mt: 2,
-          gap: 2
-        }}>
-          <Box>
-            <PeopleButton 
-              label="Beneficiaries" 
-              onClick={() => handleButtonClick('beneficiaries')}
-              active={activeTable === 'beneficiaries'}
-            />
-          </Box>
-          
-          <Box sx={{ 
-            display: 'flex',
-            justifyContent: 'center',
-            flex: 1
-          }}>
-            <PeopleButton 
-              label="Volunteers" 
-              onClick={() => handleButtonClick('volunteers')}
-              active={activeTable === 'volunteers'}
-            />
-          </Box>
-          
-          <Box>
-            <PeopleButton 
-              label="Donators" 
-              onClick={() => handleButtonClick('donators')}
-              active={activeTable === 'donators'}
-            />
-          </Box>
+        <EditDataBox campaign={campaign} onUpdate={handleUpdateCampaign} disableEdit={campaign?.status === 'archived'} />
+
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4, gap: 2 }}>
+          <PeopleButton 
+            label="المستفيدون" 
+            count={activeTable === 'beneficiaries' ? tableRows.length : 0} 
+            onClick={() => handleButtonClick('beneficiaries')} 
+            active={activeTable === 'beneficiaries'} 
+          />
+          <PeopleButton 
+            label="المتطوعون" 
+            count={activeTable === 'volunteers' ? tableRows.length : 0} 
+            onClick={() => handleButtonClick('volunteers')} 
+            active={activeTable === 'volunteers'} 
+          />
+          <PeopleButton 
+            label="المتبرعون" 
+            count={activeTable === 'donators' ? tableRows.length : 0} 
+            onClick={() => handleButtonClick('donators')} 
+            active={activeTable === 'donators'} 
+          />
         </Box>
 
-        {/* عرض جدول البيانات عند اختيار زر */}
         {activeTable && (
           <Box sx={{ mt: 3 }}>
-            <Datatable 
-              title={tableData[activeTable].title}
-              columns={tableData[activeTable].columns}
-              rows={tableData[activeTable].rows}
-            />
+            {tableLoading ? (
+              <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+                <CircularProgress />
+              </Box>
+            ) : tableRows.length === 0 ? (
+              <Alert severity="info">لا توجد بيانات لعرضها</Alert>
+            ) : (
+              <Datatable 
+                title={tableTitle} 
+                columns={tableColumnsMap[activeTable]} 
+                rows={tableRows} 
+              />
+            )}
           </Box>
         )}
       </div>
+
+      <Snackbar open={!!successMsg} autoHideDuration={3000} onClose={() => setSuccessMsg('')}>
+        <MuiAlert onClose={() => setSuccessMsg('')} severity="success" sx={{ width: '100%' }}>
+          {successMsg}
+        </MuiAlert>
+      </Snackbar>
     </div>
   );
 };

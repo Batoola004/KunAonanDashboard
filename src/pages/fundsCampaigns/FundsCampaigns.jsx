@@ -4,8 +4,54 @@ import Sidebar from '../../components/sidebar/Sidebar';
 import Navbar from '../../components/navbar/Navbar';
 import CampaignCard from '../../components/campaignCard/CampaignCard';
 import './fundsCampaigns.scss';
+import Filter from '../../components/filters/Filter';
+import { useState } from 'react';
 
 const FundsCampaigns = () => {
+  const [activeFilter, setActiveFilter] = useState('all');
+  
+    const filterButtons = [
+      {
+        text: "all",
+        value: "all",
+        color: "primary",
+        hoverColor: "#e3f2fd",
+        activeTextColor: "#ffffff",
+        onClick: () => {
+          setActiveFilter('all');
+        }
+      },
+      {
+        text: "Health",
+        value: "Health",
+        color: "secondary",
+        hoverColor: "#f3e5f5",
+        activeTextColor: "#ffffff",
+        onClick: () => {
+          setActiveFilter('Health');
+        }
+      },
+      {
+        text: "Build",
+        value: "Build",
+        color: "success",
+        hoverColor: "#e8f5e9",
+        activeTextColor: "#ffffff",
+        onClick: () => {
+          setActiveFilter('Build');
+        }
+      },
+      {
+        text: "Education",
+        value: "Education",
+        color: "primary",
+        hoverColor: "#e3f2fd",
+        activeTextColor: "#ffffff",
+        onClick: () => {
+          setActiveFilter('Education');
+        }
+      }
+    ];
   // Campaign data with financial details
   const campaigns = [
     {
@@ -53,7 +99,17 @@ const FundsCampaigns = () => {
       <Sidebar />
       <div className="fundsCampaignsContainer">
         <Navbar />
-        
+        <Filter
+                  buttons={filterButtons}
+                  activeFilter={activeFilter}
+                  spacing={2}
+                  buttonProps={{
+                    sx: {
+                      minWidth: '120px',
+                      fontSize: '0.875rem'
+                    }
+                  }}
+                />
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <Typography variant="h4" sx={{ mb: 4, fontWeight: 'bold', color: '#2e7d32' }}>
             Campaign Funds Management

@@ -1,0 +1,68 @@
+.volunteerRequestAdd {
+  display: flex;
+  width: 100%;
+  background-color: #F4F0EC;
+  background-image: url('../5.png');
+  background-repeat: repeat;
+  background-size: contain;
+  background-position: center;
+  color: #616161;
+  min-height: 100vh;
+
+  .volunteerRequestAddContainer {
+    flex: 5;
+    margin-left: 250px;
+    
+
+    h2 {
+      margin-bottom: 20px;
+      color: #2ea48e;
+    }
+    .volunteerForm {
+      background:linear-gradient(180deg, #d2b48c 0%, #a79174 100%);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      max-width: 700px; 
+      margin: auto;
+      
+ 
+      input, select, textarea {
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+      }
+
+      .daysContainer, .typesContainer {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+      }
+
+      .submitBtn {
+        background-color: #155e5d;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 14px;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background-color: #248a76;
+        }
+
+        &:disabled {
+          background-color: #ccc;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+}

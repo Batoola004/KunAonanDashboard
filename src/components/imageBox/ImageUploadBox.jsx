@@ -18,15 +18,15 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 });
 
-const ImageUploadBox = ({ 
+const ImageUploadBox = ({
   width = '500px',
   height = '300px',
   label = 'اسحب وأسقط الصورة هنا',
   uploadLabel = 'اختر صورة',
   boxColor = '#f5f5f5',
-  backgroundImage = null, // إمكانية إضافة صورة خلفية
+  backgroundImage = null,
   accept = 'image/*',
-  onImageSelected, // دالة تستدعى عند اختيار صورة
+  onImageSelected,
   disabled = false
 }) => {
   const [preview, setPreview] = useState(backgroundImage);
@@ -36,14 +36,12 @@ const ImageUploadBox = ({
     const file = event.target.files?.[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setPreview(reader.result);
-      if (onImageSelected) {
-        onImageSelected(reader.result); // إرجاع بيانات الصورة كـ base64
-      }
-    };
-    reader.readAsDataURL(file);
+    // استخدم URL.createObjectURL لعرض الصورة بسرعة
+    setPreview(URL.createObjectURL(file));
+
+    if (onImageSelected) {
+      onImageSelected(file); 
+    }
   };
 
   const handleDrag = (e) => {
@@ -62,20 +60,17 @@ const ImageUploadBox = ({
     setDragActive(false);
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       const file = e.dataTransfer.files[0];
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result);
-        if (onImageSelected) {
-          onImageSelected(reader.result);
-        }
-      };
-      reader.readAsDataURL(file);
+      setPreview(URL.createObjectURL(file));
+
+      if (onImageSelected) {
+        onImageSelected(file); 
+      }
     }
   };
 
   return (
     <Box
-      sx={{ 
+      sx={{
         width: width,
         height: height,
         backgroundColor: boxColor,
@@ -120,10 +115,11 @@ const ImageUploadBox = ({
             }}
           >
             {uploadLabel}
-            <VisuallyHiddenInput 
-              type="file" 
+            <VisuallyHiddenInput
+              type="file"
               accept={accept}
               onChange={handleFileChange}
+              disabled={disabled}
             />
           </Button>
         </>
@@ -152,10 +148,11 @@ const ImageUploadBox = ({
             }}
           >
             تغيير الصورة
-            <VisuallyHiddenInput 
-              type="file" 
+            <VisuallyHiddenInput
+              type="file"
               accept={accept}
               onChange={handleFileChange}
+              disabled={disabled}
             />
           </Button>
         </Box>

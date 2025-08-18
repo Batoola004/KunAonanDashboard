@@ -9,23 +9,15 @@ import {
   TableHead,
   TableRow,
   Typography,
-  useTheme,
   Button
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const InfoBox = ({ 
-  volunteers,
-  columns = [
-    { field: 'id', headerName: 'ID' },
-    { field: 'firstName', headerName: 'الاسم الأول' },
-    { field: 'lastName', headerName: 'الاسم الأخير' },
-    { field: 'age', headerName: 'العمر' },
-    { field: 'status', headerName: 'الحالة' }
-  ],
-  title = 'قائمة البيانات', // تغيير القيمة الافتراضية
-  showTitle = true, // إضافة خاصية لإظهار/إخفاء العنوان
-  titleVariant = 'h5', // التحكم بنوع العنوان
+  data = [],
+  title = 'قائمة البيانات',
+  showTitle = true,
+  titleVariant = 'h5',
   showDetailsButton = true,
   detailsButtonText = 'details',
   colors = {
@@ -34,46 +26,43 @@ const InfoBox = ({
     rowBg: '#d1bca0ff',
     evenRowBg: '#d2b48c',
     textColor: '#000000',
-    buttonBg: '#32a3a1',
+    buttonBg: '#3c8583ff',
     buttonHover: '#155e5d',
     buttonText: '#ffffff',
     paperBg: '#ffffff',
     titleColor: '#155e5d'
-  }
+  },
+  onDetailsClick 
 }) => {
-  const theme = useTheme();
   const navigate = useNavigate();
 
-  const handleDetailsClick = (volunteer) => {
-    navigate(`/volunteer_details`, {
-      state: { volunteerData: volunteer }
-    });
+  // توليد الأعمدة ديناميكيًا من أول عنصر في المصفوفة
+  const columns = data.length > 0 ? Object.keys(data[0]).map(key => ({
+    field: key,
+    headerName: key.replace(/_/g, ' ')
+  })) : [];
+
+  const handleDetailsClick = (row) => {
+    if (onDetailsClick) {
+      onDetailsClick(row);
+    } else {
+      navigate(`/details`, { state: { rowData: row } });
+    }
   };
 
   return (
-    <Box sx={{ 
-      p: 3, 
-      backgroundColor: '#f9f9f9',
-      width: '100%'
-    }}>
+    <Box sx={{ p: 3, backgroundColor: '#f9f9f9', width: '100%' }}>
       {showTitle && (
         <Typography 
           variant={titleVariant} 
           gutterBottom 
-          sx={{ 
-            mb: 3, 
-            fontWeight: 'bold',
-            color: colors.titleColor
-          }}
+          sx={{ mb: 3, fontWeight: 'bold', color: colors.titleColor }}
         >
           {title}
         </Typography>
       )}
       
-      <TableContainer component={Paper} elevation={3} sx={{
-        backgroundColor: colors.paperBg,
-        overflowX: 'auto'
-      }}>
+      <TableContainer component={Paper} elevation={3} sx={{ backgroundColor: colors.paperBg, overflowX: 'auto' }}>
         <Table sx={{ minWidth: 650 }} aria-label="data table">
           <TableHead sx={{ 
             backgroundColor: colors.headerBg,
@@ -85,44 +74,37 @@ const InfoBox = ({
           }}>
             <TableRow>
               {columns.map((column) => (
-                <TableCell key={column.field}>
-                  {column.headerName}
-                </TableCell>
+                <TableCell key={column.field}>{column.headerName}</TableCell>
               ))}
               {showDetailsButton && <TableCell>الإجراءات</TableCell>}
             </TableRow>
           </TableHead>
 
           <TableBody>
-            {volunteers.map((volunteer, index) => (
+            {data.map((row, index) => (
               <TableRow 
-                key={volunteer.id}
+                key={row.id || index}
                 sx={{ 
                   backgroundColor: index % 2 === 0 ? colors.rowBg : colors.evenRowBg,
-                  '& .MuiTableCell-root': {
-                    color: colors.textColor,
-                    whiteSpace: 'nowrap'
-                  }
+                  '& .MuiTableCell-root': { color: colors.textColor, whiteSpace: 'nowrap' }
                 }}
               >
                 {columns.map((column) => (
-                  <TableCell key={`${volunteer.id}-${column.field}`}>
-                    {volunteer[column.field] || 'undefined'}
+                  <TableCell key={`${row.id || index}-${column.field}`}>
+                    {row[column.field] !== undefined ? row[column.field] : '-'}
                   </TableCell>
                 ))}
-                
+
                 {showDetailsButton && (
                   <TableCell>
                     <Button 
                       variant="contained"
                       size="small"
-                      onClick={() => handleDetailsClick(volunteer)}
+                      onClick={() => handleDetailsClick(row)}
                       sx={{
                         backgroundColor: colors.buttonBg,
                         color: colors.buttonText,
-                        '&:hover': {
-                          backgroundColor: colors.buttonHover,
-                        },
+                        '&:hover': { backgroundColor: colors.buttonHover },
                         fontWeight: 'bold',
                       }}
                     >

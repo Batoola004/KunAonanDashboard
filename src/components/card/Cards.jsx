@@ -5,49 +5,60 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import CardActionArea from '@mui/material/CardActionArea';
 import CardActions from '@mui/material/CardActions';
-import { useNavigate } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import api from '../../api/axios';
 
-// إنشاء ثيم مخصص باللون الجديد
 const theme = createTheme({
   palette: {
     primary: {
       main: '#155e5d',
       contrastText: '#fff',
     },
+    success: {
+      main: '#4caf50',
+      contrastText: '#fff',
+    }
   },
 });
 
 const Cards = ({ 
-  imageUrl = "../../../assets/person.jpg",//هي مو طالعة 
+  id,
+  imageUrl = "../../../assets/person.jpg",
   imageHeight = 180,
   title,
   description,
   showActions = true,
-  buttons = [
-    { text: "Active", variant: "contained" },
-    { text: "Archive", variant: "outlined" },
-    { text: "Details", variant: "text" }
-  ],
-  onButtonClick
+  onDetailsClick,
+  isActive = false,
+  onArchiveSuccess,
+  onActivateSuccess,
+  showArchive = true,
+  showActivate = true
 }) => {
-  const navigate = useNavigate();
+  const handleArchive = async () =>{
+    try {
+      const response = await api.post(`/campaigns/archive/${id}`);
+      if (response.status === 200) {
+        alert("Campaign archived successfully!");
+        onArchiveSuccess(id);
+      }
+    } catch (error) {
+      console.error("Error archiving campaign:", error);
+      alert("Failed to archive campaign.");
+    }
+  };
 
-  const handleDefaultClick = (btnIndex) => {
-    switch(btnIndex) {
-      case 0: // زر التفاصيل
-        navigate('/campaign_details');
-        break;
-      case 1: // زر التعديل
-        console.log('تعديل العنصر');
-        break;
-      case 2: // زر الحذف
-        console.log('حذف العنصر');
-        break;
-      default:
-        break;
+  const handleActivate = async () => {
+    try {
+      const response = await api.post(`/campaigns/activate/${id}`);
+      if (response.status === 200) {
+        alert("Campaign activated successfully!");
+        onActivateSuccess(id); 
+      }
+    } catch (error) {
+      console.error("Error activating campaign:", error);
+      alert("Failed to activate campaign.");
     }
   };
 
@@ -56,7 +67,7 @@ const Cards = ({
       <Card sx={{ 
         width: 380,
         minHeight: 420,
-        backgroundColor: '#d2b48c',
+        backgroundColor:  '#d2b48c', 
         display: 'flex',
         flexDirection: 'column',
         borderRadius: '12px',
@@ -67,63 +78,60 @@ const Cards = ({
           boxShadow: '0 6px 12px rgba(0,0,0,0.15)'
         }
       }}>
-        <CardActionArea sx={{ flexGrow: 1 }}>
-          <CardMedia
-            component="img"
-            height={imageHeight}
-            image={imageUrl}
-            alt={title}
-            sx={{
-              objectFit: 'cover',
-              width: '100%',
-              borderTopLeftRadius: '12px',
-              borderTopRightRadius: '12px'
-            }}
-          />
-          <CardContent sx={{ flexGrow: 1 }}>
-            <Typography gutterBottom variant="h5" component="div" sx={{ fontWeight: 'bold' }}>
-              {title}
-            </Typography>
-            <Typography variant="body2" sx={{ 
-              color: 'text.secondary',
-              lineHeight: '1.6',
-              minHeight: '60px'
-            }}>
-              {description}
-            </Typography>
-          </CardContent>
-        </CardActionArea>
+        <CardMedia
+          component="img"
+          height={imageHeight}
+          image={imageUrl}
+          alt={title}
+          sx={{
+            objectFit: 'cover',
+            width: '100%',
+            borderTopLeftRadius: '12px',
+            borderTopRightRadius: '12px'
+          }}
+        />
+        <CardContent sx={{ flexGrow: 1 }}>
+          <Typography gutterBottom variant="h5" component="div" sx={{ fontWeight: 'bold' }}>
+            {title}
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: '1.6', minHeight: '60px' }}>
+            {description}
+          </Typography>
+        </CardContent>
         {showActions && (
-          <CardActions sx={{ 
-            padding: '16px',
-            display: 'flex',
-            justifyContent: 'space-between',
-            gap: '8px'
-          }}>
-            {buttons.map((button, index) => (
-              <Button 
-                key={index}
+          <CardActions sx={{ padding: '16px', justifyContent: 'flex-end' }}>
+            <Button
+              size="medium"
+              variant="contained"
+              color="primary"
+              onClick={onDetailsClick}
+              sx={{ fontWeight: 'bold' }}
+            >
+              Details
+            </Button>
+           {showActivate &&(
+            <Button
+              size="medium"
+              variant="contained"
+              color="success"
+              onClick={handleActivate}
+              sx={{ fontWeight: 'bold' }}
+              disabled={isActive}
+            >
+             Activate
+            </Button>
+           )}
+            {showArchive && (   // 🔥 الشرط هون
+              <Button
                 size="medium"
-                variant={button.variant || "contained"}
-                color="primary"
-                onClick={() => onButtonClick ? onButtonClick(index) : handleDefaultClick(index)}
-                sx={{
-                  flex: 1,
-                  fontWeight: 'bold',
-                  '&:hover': {
-                    transform: 'translateY(-2px)',
-                    ...(button.variant === 'outlined' && {
-                      backgroundColor: 'rgba(21, 94, 93, 0.08)',
-                    }),
-                    ...(button.variant === 'text' && {
-                      backgroundColor: 'rgba(21, 94, 93, 0.08)',
-                    }),
-                  }
-                }}
+                variant="contained"
+                color="error"
+                onClick={handleArchive}
+                sx={{ fontWeight: 'bold' }}
               >
-                {button.text}
+               Archive
               </Button>
-            ))}
+            )}
           </CardActions>
         )}
       </Card>
@@ -132,18 +140,18 @@ const Cards = ({
 };
 
 Cards.propTypes = {
+  id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   imageUrl: PropTypes.string,
   imageHeight: PropTypes.number,
   showActions: PropTypes.bool,
-  buttons: PropTypes.arrayOf(
-    PropTypes.shape({
-      text: PropTypes.string,
-      variant: PropTypes.string
-    })
-  ),
-  onButtonClick: PropTypes.func,
+  onDetailsClick: PropTypes.func,
+  isActive: PropTypes.bool,
+  onActivateSuccess: PropTypes.func,
+  onArchiveSuccess: PropTypes.func,
+  showArchive: PropTypes.bool ,
+  showActivate:PropTypes.bool
 };
 
 export default Cards;

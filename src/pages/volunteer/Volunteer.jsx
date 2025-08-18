@@ -29,33 +29,23 @@ export const Volunteer = () => {
         }
       },
       {
-        text: "Health",
-        value: "Health",
+        text: "Type",
+        value: "Type",
         color: "secondary",
         hoverColor: "#f3e5f5",
         activeTextColor: "#ffffff",
         onClick: () => {
-          setActiveFilter('Health');
+          setActiveFilter('Type');
         }
       },
       {
-        text: "Build",
-        value: "Build",
+        text: "Day",
+        value: "Day",
         color: "success",
         hoverColor: "#e8f5e9",
         activeTextColor: "#ffffff",
         onClick: () => {
-          setActiveFilter('Build');
-        }
-      },
-      {
-        text: "Education",
-        value: "Education",
-        color: "primary",
-        hoverColor: "#e3f2fd",
-        activeTextColor: "#ffffff",
-        onClick: () => {
-          setActiveFilter('Education');
+          setActiveFilter('Day');
         }
       }
     ];

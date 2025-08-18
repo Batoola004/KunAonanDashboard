@@ -8,23 +8,25 @@ const InputBox = ({
   color = 'secondary',
   boxColor = '#ffffff',
   height = 'auto',
-  multiline = true, // إضافة خاصية متعددة الأسطر
-  minRows = 1, // عدد الأسطر الأدنى
-  maxRows = 10, // عدد الأسطر الأقصى
+  multiline = true,
+  minRows = 1,
+  maxRows = 10,
+  value,
+  onChange
 }) => {
   return (
     <Box
       component="form"
-      sx={{ 
-        '& > :not(style)': { 
+      sx={{
+        '& > :not(style)': {
           m: 1,
           width: width,
           minHeight: height,
           backgroundColor: boxColor,
           borderRadius: '4px',
           padding: '16px',
-          overflow: 'hidden', // لمنع التجاوز
-        } 
+          overflow: 'hidden',
+        }
       }}
       noValidate
       autoComplete="off"
@@ -33,28 +35,30 @@ const InputBox = ({
         label={label}
         color={color}
         focused
-        multiline={multiline} // تفعيل وضع متعدد الأسطر
+        multiline={multiline}
         minRows={minRows}
         maxRows={maxRows}
+        fullWidth
+        value={value}
+        onChange={onChange}
         sx={{
           backgroundColor: 'transparent',
           width: '100%',
           padding: '8px',
           '& .MuiInputLabel-root': {
             position: 'absolute',
-            top: '10px', // تعديل موقع النص الإرشادي
+            top: '10px',
             left: '8px',
-            backgroundColor: boxColor, // لون خلفية النص الإرشادي
+            backgroundColor: boxColor,
             padding: '0 4px',
           },
           '& .MuiInputBase-root': {
-            height: multiline ? 'auto' : '100%', // تكييف الارتفاع
+            height: multiline ? 'auto' : '100%',
           },
         }}
-        fullWidth
       />
     </Box>
   );
-}
+};
 
 export default InputBox;

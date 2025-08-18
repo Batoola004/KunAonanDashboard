@@ -1,14 +1,50 @@
 .home{
-    display: flex;
-    width: 100%;
-    background-color: #F4F0EC; // لون الخلفية الثابت خلف الصورة
-    background-image: url('../5.png');
-    background-repeat: no-repeat;
-    background-size: contain; // أو cover حسب حاجتك
-    background-position: center; // لتوسيط الصورة
-    color: #616161;
-    min-height: 100vh;
-    .homeContainer{
-        flex: 5;
-    }
+  display: flex;
+  width: 100%;
+  background-color: #F4F0EC; 
+  background-image: url('../5.png');
+  background-repeat: repeat;
+  background-size: contain; 
+  background-position: center; 
+  color: #616161;
+  min-height: 100vh;
+
+  .homeContainer{
+      flex: 5;
+      margin-left: 250px; 
+      .charts{
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 20px; 
+      }
+
+      .chartBox {
+  background: rgba(226, 202, 171, 0.5); /* شفافية أولية 50% */
+  border-radius: 15px;
+  padding: 20px; 
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+
+  opacity: 0;
+  animation: fadeSlideUp 0.8s ease forwards;
+
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, inset-shadow 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2), inset 0 0 10px rgba(255,255,255,0.2); /* ظل داخلي خفيف */
+    background: rgba(226, 202, 171, 0.9); /* تصبح أوضح عند hover */
+  }
+
+  h3 {
+    margin-bottom: 15px;
+    font-size: 18px;
+  }
+}
+
+  }
+}
+
+@keyframes fadeSlideUp {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
