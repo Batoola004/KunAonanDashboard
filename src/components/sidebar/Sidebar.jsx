@@ -17,7 +17,8 @@ import {
   PermIdentity as PermIdentityIcon,
   Wallet as WalletIcon,
   ExpandMore as ExpandMoreIcon,
-  ExpandLess as ExpandLessIcon
+  ExpandLess as ExpandLessIcon,
+   Apps as AppsIcon  
 } from '@mui/icons-material';
 import './sidebar.scss';
 
@@ -362,12 +363,38 @@ const Sidebar = () => {
   {/* REPORTS */}
           <li onClick={() => handleNavigation('/reports')}>
             <MenuIcon className='icon'/>
+            <span>Reports</span>
+          </li>
+          <li onClick={() => handleNavigation('/reportsAdd')}>
+            <AddBoxIcon className='icon'/>
             <span>Create report</span>
           </li>
 
         
 </>)}
 
+    <div className="section-header" onClick={() => toggleSection('categories')}>
+  <div className="title-wrapper">
+    <p className="title">Categories</p>
+    {expandedSections.categories ? 
+      <ExpandLessIcon className="expand-icon" /> : 
+      <ExpandMoreIcon className="expand-icon" />}
+  </div>
+</div>
+{expandedSections.categories && (
+
+<>
+          {/* Categories */}
+          <li onClick={() => handleNavigation('/categoryShow')}>
+            <AppsIcon className='icon'/>
+            <span>Categories</span>
+          </li>
+          <li onClick={() => handleNavigation('/categoryAdd')}>
+            <AddBoxIcon className='icon'/>
+            <span>Add Categories</span>
+          </li>
+          
+</>)}
            <div className="section-header" onClick={() => toggleSection('settings')}>
   <div className="title-wrapper">
     <p className="title">Settings</p>
@@ -384,6 +411,7 @@ const Sidebar = () => {
             <SettingsIcon className='icon'/>
             <span>Settings</span>
           </li>
+          
 </>)}
 
         </ul>

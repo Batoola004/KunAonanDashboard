@@ -22,6 +22,10 @@ import Login2 from "./pages/login/Login2";
 import Login3 from "./pages/login/Login3";
 import GuarnteesArchive from "./pages/guarntesArchive/GuarnteesArchive";
 import Emails from "./pages/emails/Emails";
+import Reports from "./pages/reports/Reports";
+import ReportsAdd from './pages/reportsAdd/ReportsAdd'
+import CategoryAdd from "./pages/categoryAdd/CategoryAdd";
+import CategoryShow from "./pages/categoryShow/CategoryShow";
 
 const router = createBrowserRouter([
   // الصفحات الرئيسية
@@ -31,6 +35,9 @@ const router = createBrowserRouter([
   { path: "/home", element: <Home /> },
   { path: "/confirm", element: <Home /> },
 
+  //Category
+  { path: "/categoryAdd", element: <CategoryAdd /> },
+  { path: "/categoryShow", element: <CategoryShow /> },
   // Campaign
   { path: "/campaign", element: <Campaign /> },
   { path: "/campaign/:id", element: <Single /> },
@@ -76,7 +83,11 @@ const router = createBrowserRouter([
   { path: "/guarnteesArchive", element: <GuarnteesArchive /> },
 
   // Emails
-  { path: "/emails", element: <Emails /> } 
+  { path: "/emails", element: <Emails /> } ,
+
+  //Reports
+  { path: "/reports", element: <Reports /> },
+  { path: "/reportsAdd", element: <ReportsAdd /> }
 ]);
 
 function App() {
