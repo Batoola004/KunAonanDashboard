@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Sidebar from '../../components/sidebar/Sidebar';
 import Navbar from '../../components/navbar/Navbar';
 import Filter from '../../components/filters/Filter';
@@ -10,7 +10,8 @@ import ImageUploadBox from '../../components/imageBox/ImageUploadBox';
 import api from '../../api/axios';
 
 const GuarnteesAdd = () => {
-  const [activeFilter, setActiveFilter] = useState('all');
+  const [activeFilter, setActiveFilter] = useState('');
+  const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -20,11 +21,29 @@ const GuarnteesAdd = () => {
   });
   const [loading, setLoading] = useState(false);
 
-  const filterButtons = [
-    { text: "كفالة طالب", value: "student", color: "secondary", hoverColor: "#f3e5f5", activeTextColor: "#ffffff", onClick: () => setActiveFilter('student') },
-    { text: "كفالة يتيم", value: "orphan", color: "success", hoverColor: "#e8f5e9", activeTextColor: "#ffffff", onClick: () => setActiveFilter('orphan') },
-    { text: "كفالة أسرة", value: "family", color: "primary", hoverColor: "#e3f2fd", activeTextColor: "#ffffff", onClick: () => setActiveFilter('family') }
-  ];
+  // جلب الفئات (Categories) من API وتعيين الفلتر الافتراضي
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await api.get('/category/getAll/Sponsorship');
+        if (response.data && response.data.data) {
+          const dataArray = Array.isArray(response.data.data)
+            ? response.data.data
+            : [response.data.data];
+          setCategories(dataArray);
+
+          // ضبط الفلتر الافتراضي لأول كاتيجوري موجود
+          if (dataArray.length > 0) {
+            setActiveFilter(dataArray[0].id);
+          }
+        }
+      } catch (error) {
+        console.error('خطأ أثناء جلب الفلاتر:', error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -37,6 +56,10 @@ const GuarnteesAdd = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!activeFilter) {
+      alert('يرجى اختيار نوع الكفالة قبل الإرسال');
+      return;
+    }
     setLoading(true);
 
     try {
@@ -45,6 +68,7 @@ const GuarnteesAdd = () => {
       data.append('description', formData.description);
       data.append('monthlyAmount', formData.monthlyAmount);
       data.append('sponsoredName', formData.sponsoredName);
+      data.append('category_id', activeFilter);
       if (formData.image) data.append('image', formData.image);
 
       const response = await api.post('/sponsorship/add', data, {
@@ -61,6 +85,7 @@ const GuarnteesAdd = () => {
         sponsoredName: '',
         image: null
       });
+      if (categories.length > 0) setActiveFilter(categories[0].id);
     } catch (error) {
       console.error('Error submitting sponsorship:', error);
       alert(error.response?.data?.message || 'حدث خطأ أثناء إضافة الكفالة');
@@ -68,6 +93,14 @@ const GuarnteesAdd = () => {
       setLoading(false);
     }
   };
+
+  // إنشاء أزرار الفلترة ديناميكياً من API
+  const filterButtons = categories.map(cat => ({
+    text: cat.name_category_ar || cat.name,
+    value: cat.id,
+    color: 'primary',
+    onClick: () => setActiveFilter(cat.id)
+  }));
 
   return (
     <div className='guarnteesAdd'>
@@ -89,7 +122,8 @@ const GuarnteesAdd = () => {
             color="#ffffff"
             boxColor="#d2b48c"
             value={formData.name}
-            onChange={(e) => handleInputChange({ target: { name: 'name', value: e.target.value } })}
+            onChange={handleInputChange}
+            name="name"
           />
           <InputBox 
             width="800px"
@@ -97,7 +131,8 @@ const GuarnteesAdd = () => {
             color="#ffffff"
             boxColor="#d2b48c"
             value={formData.sponsoredName}
-            onChange={(e) => handleInputChange({ target: { name: 'sponsoredName', value: e.target.value } })}
+            onChange={handleInputChange}
+            name="sponsoredName"
           />
         </div>
 
@@ -110,7 +145,8 @@ const GuarnteesAdd = () => {
             multiline
             minRows={4}
             value={formData.description}
-            onChange={(e) => handleInputChange({ target: { name: 'description', value: e.target.value } })}
+            onChange={handleInputChange}
+            name="description"
           />
         </div>
 
@@ -121,7 +157,8 @@ const GuarnteesAdd = () => {
             color="#ffffff"
             boxColor="#218483"
             value={formData.monthlyAmount}
-            onChange={(e) => handleInputChange({ target: { name: 'monthlyAmount', value: e.target.value } })}
+            onChange={handleInputChange}
+            name="monthlyAmount"
           />
         </div>
 

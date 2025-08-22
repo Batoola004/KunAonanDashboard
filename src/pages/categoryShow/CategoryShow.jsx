@@ -7,33 +7,16 @@ import './categoryShow.scss';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const CategoryShow = () => {
-  const [activeFilter, setActiveFilter] = useState("All"); 
+  const [activeFilter, setActiveFilter] = useState("Campaign"); // فلتر افتراضي
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // جلب الكاتيجوريات حسب الفلتر
-  const fetchCategories = async (categoryName) => {
-    setLoading(true);
-    try {
-      if (categoryName === "All") {
-        let allCategories = [];
-        let currentId = 1;
-        while (true) {
-          try {
-            const response = await api.get(`/category/get/${currentId}`);
-            if (response.data && response.data.data) {
-              allCategories.push(response.data.data);
-              currentId++;
-            } else {
-              break;
-            }
-          } catch {
-            break;
-          }
-        }
-        setCategories(allCategories);
-      } else {
-        const response = await api.get(`/category/getAll/${categoryName}`);
+  // جلب الفئات حسب النوع
+  useEffect(() => {
+    const fetchFiltered = async () => {
+      setLoading(true);
+      try {
+        const response = await api.get(`/category/getAll/${activeFilter}`);
         if (response.data && response.data.data) {
           const dataArray = Array.isArray(response.data.data)
             ? response.data.data
@@ -42,33 +25,31 @@ const CategoryShow = () => {
         } else {
           setCategories([]);
         }
+      } catch (error) {
+        console.error(error);
+        setCategories([]);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("خطأ أثناء جلب الكاتيجوري:", error);
-      setCategories([]);
-    } finally {
-      setLoading(false);
+    };
+    if (activeFilter) {
+      fetchFiltered();
     }
-  };
-
-  useEffect(() => {
-    fetchCategories(activeFilter);
   }, [activeFilter]);
 
-  // دالة حذف الكاتيجوري
   const handleDelete = async (id) => {
     if (!window.confirm("هل أنت متأكد من حذف هذا الكاتيجوري؟")) return;
     try {
       await api.delete(`/category/delete/${id}`);
       setCategories(prev => prev.filter(cat => cat.id !== id));
     } catch (error) {
-      console.error("خطأ أثناء حذف الكاتيجوري:", error);
+      console.error(error);
       alert("فشل حذف الكاتيجوري. حاول مرة أخرى.");
     }
   };
 
+  // أزرار الفلاتر بدون "All"
   const filterButtons = [
-    { text: "All", value: "All", onClick: () => setActiveFilter("All"), color: "dark" },
     { text: "Campaign", value: "Campaign", onClick: () => setActiveFilter("Campaign"), color: "primary" },
     { text: "Sponsorship", value: "Sponsorship", onClick: () => setActiveFilter("Sponsorship"), color: "secondary" },
     { text: "HumanCase", value: "HumanCase", onClick: () => setActiveFilter("HumanCase"), color: "success" },
@@ -89,42 +70,42 @@ const CategoryShow = () => {
         />
 
         <div className="categoriesContainer">
-          {loading ? (
-            <p>جارٍ تحميل البيانات...</p>
-          ) : categories.length > 0 ? (
-            <div className="cardsGrid">
-              <AnimatePresence>
-                {categories.map((cat) => (
-                  <motion.div
-                    key={cat.id}
-                    className="categoryCard"
-                    layout
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    whileHover={{ scale: 1.05, boxShadow: "0px 8px 20px rgba(0,0,0,0.15)" }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    {cat.image && <img src={cat.image} alt={cat.name_category_ar || cat.name} />}
-                    <div className="categoryInfo">
-                      <h3>
-                        {cat.name_category_ar ? cat.name_category_ar : cat.name} 
-                        <span className="categoryId"> - [{cat.id}]</span>
-                      </h3>
-                      {cat.description && <p>{cat.description}</p>}
-                      <button className="deleteButton" onClick={() => handleDelete(cat.id)}>حذف</button>
-                    </div>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            </div>
-          ) : (
-            <p>لا توجد نتائج لعرضها.</p>
-          )}
+          <h2 className="pageTitle">
+            Categories ({categories.length})
+          </h2>
+
+          <div className="cardsGrid">
+            <AnimatePresence>
+              {categories.map((cat) => (
+                <motion.div
+                  key={cat.id}
+                  className="categoryCard"
+                  layout
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  whileHover={{ scale: 1.05, boxShadow: "0px 8px 20px rgba(0,0,0,0.15)" }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {cat.image && <img src={cat.image} alt={cat.name_category_ar || cat.name} />}
+                  <div className="categoryInfo">
+                    <h3>
+                      {cat.name_category_ar ? cat.name_category_ar : cat.name} 
+                      <span className="categoryId"> - [{cat.id}]</span>
+                    </h3>
+                    {cat.description && <p>{cat.description}</p>}
+                    <button className="deleteButton" onClick={() => handleDelete(cat.id)}>حذف</button>
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
+
+          {!loading && categories.length === 0 && <p>لا توجد نتائج لعرضها.</p>}
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default CategoryShow;

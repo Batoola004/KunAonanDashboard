@@ -26,6 +26,7 @@ import Reports from "./pages/reports/Reports";
 import ReportsAdd from './pages/reportsAdd/ReportsAdd'
 import CategoryAdd from "./pages/categoryAdd/CategoryAdd";
 import CategoryShow from "./pages/categoryShow/CategoryShow";
+import BeneficiaryRequest from "./pages/beneficiaryRequest/BeneficiaryRequest";
 
 const router = createBrowserRouter([
   // الصفحات الرئيسية
@@ -38,6 +39,7 @@ const router = createBrowserRouter([
   //Category
   { path: "/categoryAdd", element: <CategoryAdd /> },
   { path: "/categoryShow", element: <CategoryShow /> },
+
   // Campaign
   { path: "/campaign", element: <Campaign /> },
   { path: "/campaign/:id", element: <Single /> },
@@ -62,6 +64,9 @@ const router = createBrowserRouter([
   { path: "/volunteer-request/:id", element: <VolunteerRequestDetails /> },
   { path: "/volunteer-request/add", element: <VolunteerRequestAdd /> }, 
 
+  //benefiacarieyRequest
+  { path: "/beneficiaryRequest", element: <BeneficiaryRequest /> },
+
   // Funds Campaigns
   { path: "/fundsCampaigns", element: <FundsCampaigns /> },
   { path: "/fundsCampaigns/:id", element: <New /> },
@@ -75,11 +80,8 @@ const router = createBrowserRouter([
 
   // Guarntees
   { path: "/guarnteesShow", element: <GuarnteesShow /> },
-  { path: "/guarnteesShow/:id", element: <GuarnteesDetails /> },
-  { path: "/guarnteesDetails", element: <GuarnteesDetails /> },
-  { path: "/guarnteesDetails/:id", element: <New /> },
+  { path: "/guarnteesDetails/:id", element: <GuarnteesDetails /> },
   { path: "/guarnteesAdd", element: <GuarnteesAdd /> },
-  { path: "/guarnteesAdd/:id", element: <New /> },
   { path: "/guarnteesArchive", element: <GuarnteesArchive /> },
 
   // Emails

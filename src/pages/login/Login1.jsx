@@ -1,7 +1,7 @@
 import './login.scss';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import axios from 'axios';
+import api from '../../api/axios';
 
 function App() {
   const [email, setEmail] = useState("");
@@ -25,7 +25,7 @@ function App() {
     setError(null);
     setInfo(null);
     try {
-      const response = await axios.post("http://localhost:8000/api/admin/login", {
+      const response = await api.post("/admin/login", {
         email,
         password,
       });
@@ -54,7 +54,7 @@ function App() {
     setError(null);
     setInfo(null);
     try {
-      await axios.post("http://localhost:8000/api/admin/forgotPassword", { email });
+      await api.post("/admin/forgotPassword", { email });
       setInfo("تم إرسال كود التحقق إلى بريدك الإلكتروني");
       setTimeout(() => navigate("/forgot-password"), 1500); // تحويل بعد 1.5 ثانية
     } catch (err) {

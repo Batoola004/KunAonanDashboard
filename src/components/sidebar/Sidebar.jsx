@@ -204,7 +204,7 @@ const Sidebar = () => {
                 <span>Volunteer Requests</span>
               </li>
               <li onClick={() => handleNavigation('/volunteer-request/add')}>
-                <MarkEmailUnreadIcon className='icon'/>
+                <AddBoxIcon className='icon'/>
                 <span>Add Volunteer Requests</span>
               </li>
             </>
@@ -225,9 +225,13 @@ const Sidebar = () => {
                 <MenuIcon className='icon'/>
                 <span>Show Beneficiaries</span>
               </li>
-              <li onClick={() => handleNavigation('/beneficiaries/requests')}>
+              <li onClick={() => handleNavigation('/beneficiariesRequest')}>
                 <MarkEmailUnreadIcon className='icon'/>
                 <span>Benefit requests</span>
+              </li>
+              <li onClick={() => handleNavigation('/beneficiaries/requests')}>
+                <AddBoxIcon className='icon'/>
+                <span>Add Benefit request</span>
               </li>
             </>
           )}

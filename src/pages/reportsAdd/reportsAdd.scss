@@ -1,15 +1,92 @@
-.reportsAdd{
-    display: flex;
-    width: 100%;
-    background-color: #F4F0EC; 
-    background-image: url('../5.png');
-    background-repeat: repeat;
-    background-size: contain; 
-    background-position: center; 
-    color: #616161;
-    min-height: 100vh;
-    .reportsAddContainer{
-        flex: 5;
-        margin-left: 250px
+.reportsAdd {
+  display: flex;
+  width: 100%;
+  background-color: #F4F0EC;
+  min-height: 100vh;
+
+  .reportsAddContainer {
+    flex: 5;
+    margin-left: 250px;
+  }
+
+  .uploadCard {
+    background: #d2b48c;
+    padding: 40px 30px;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    text-align: center;
+    max-width: 650px;
+    margin: 50px auto;
+    transition: transform 0.3s, box-shadow 0.3s;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
     }
+
+    h2 {
+      margin-bottom: 25px;
+      color: #333;
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    input[type='file'] {
+      margin: 15px 0;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .fileName {
+      margin: 10px 0;
+      color: #555;
+      font-size: 14px;
+      font-style: italic;
+    }
+
+    .searchInput {
+      width: 100%;
+      padding: 12px 15px;
+      margin: 15px 0;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+      box-sizing: border-box;
+    }
+
+    .campaignSelect {
+      width: 100%;
+      padding: 12px 15px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+      margin-bottom: 20px;
+      display: block;
+      background-color: #fff;
+      max-height: 200px;
+      overflow-y: auto;
+      box-sizing: border-box;
+
+      option {
+        padding: 5px 10px;
+      }
+    }
+
+    .uploadBtn {
+      background: #155e5d;
+      color: #fff;
+      border: none;
+      padding: 14px 30px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      transition: 0.3s;
+
+      &:hover {
+        background: #259694;
+      }
+    }
+  }
 }

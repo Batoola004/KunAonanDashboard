@@ -12,13 +12,27 @@ const GuarnteesShow = () => {
   const [sponsorships, setSponsorships] = useState([]);
   const [loading, setLoading] = useState(false);
   const [activeCategory, setActiveCategory] = useState("all"); 
+  const [categories, setCategories] = useState([]);
 
-  // دالة جلب الكفالات
+  
+  const fetchCategories = async () => {
+    try {
+      const response = await api.get('/category/getAll/Sponsorship');
+      if (response.data && response.data.data) {
+        const dataArray = Array.isArray(response.data.data)
+          ? response.data.data
+          : [response.data.data];
+        setCategories(dataArray);
+      }
+    } catch (error) {
+      console.error("خطأ أثناء جلب الفئات:", error);
+    }
+  };
+
   const fetchSponsorships = async (categoryId) => {
     setLoading(true);
     try {
       let response;
-
       if (categoryId === "all") {
         response = await api.get('/sponsorship/byCreationDate');
       } else {
@@ -30,11 +44,9 @@ const GuarnteesShow = () => {
           id: item.id,
           title: item.sponsorship_name,
           description: item.description || "لا يوجد وصف متاح.",
-          imageUrl: item.image.startsWith("http") 
+          imageUrl: item.image?.startsWith("http") 
             ? item.image 
-            : `http://localhost:8000/${item.image}`, 
-          buttonText: "عرض التفاصيل",
-          onButtonClick: () => navigate(`/guarntees/${item.id}`),
+            : `http://localhost:8000/${item.image}`,
         }));
         setSponsorships(formattedData);
       } else {
@@ -49,10 +61,13 @@ const GuarnteesShow = () => {
   };
 
   useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
     fetchSponsorships(activeCategory);
   }, [activeCategory]);
 
-  // أزرار الفلترة
   const filterButtons = [
     {
       text: "الكل",
@@ -60,25 +75,17 @@ const GuarnteesShow = () => {
       onClick: () => setActiveCategory("all"),
       color: "info"
     },
-    {
-      text: "كفالات الأيتام",
-      value: 10,
-      onClick: () => setActiveCategory(10),
+    ...categories.map(cat => ({
+      text: cat.name_category_ar || cat.name,
+      value: cat.id,
+      onClick: () => setActiveCategory(cat.id),
       color: "primary"
-    },
-    {
-      text: "كفالات الأسر",
-      value: 11,
-      onClick: () => setActiveCategory(11),
-      color: "secondary"
-    },
-    {
-      text: "كفالات تعليمية",
-      value: 12,
-      onClick: () => setActiveCategory(12),
-      color: "success"
-    }
+    }))
   ];
+
+  const handleCardClick = (id) => {
+    navigate(`/guarnteesDetails/${id}`);
+  };
 
   return (
     <div className='guarnteesShow'>
@@ -97,7 +104,11 @@ const GuarnteesShow = () => {
           {loading ? (
             <p>جارٍ تحميل البيانات...</p>
           ) : sponsorships.length > 0 ? (
-            <CardList cardsData={sponsorships} />
+            <CardList 
+              cardsData={sponsorships} 
+              onCardClick={handleCardClick} 
+              setCardsData={setSponsorships}
+            />
           ) : (
             <p>لا توجد كفالات متاحة حالياً.</p>
           )}

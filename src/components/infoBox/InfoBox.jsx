@@ -51,7 +51,7 @@ const InfoBox = ({
   };
 
   return (
-    <Box sx={{ p: 3, backgroundColor: '#f9f9f9', width: '100%' }}>
+    <Box sx={{ p: 3, backgroundColor: '#rgba(0,0,0,0.05)', width: '100%' }}>
       {showTitle && (
         <Typography 
           variant={titleVariant} 
