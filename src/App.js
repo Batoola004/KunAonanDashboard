@@ -27,7 +27,9 @@ import ReportsAdd from './pages/reportsAdd/ReportsAdd'
 import CategoryAdd from "./pages/categoryAdd/CategoryAdd";
 import CategoryShow from "./pages/categoryShow/CategoryShow";
 import BeneficiaryRequest from "./pages/beneficiaryRequest/BeneficiaryRequest";
-
+import Benefciaries from "./pages/benefciaries/Benefciaries";
+import BeneficiaryRequestDetails from "./pages/beneficiaryRequestDetails/BeneficiaryRequestDetails";
+import BeneficiaryRequestAdd from "./pages/beneficiaryRequestAdd/BeneficiaryRequestAdd";
 const router = createBrowserRouter([
   // الصفحات الرئيسية
   { path: "/", element: <Login1 /> },
@@ -64,8 +66,15 @@ const router = createBrowserRouter([
   { path: "/volunteer-request/:id", element: <VolunteerRequestDetails /> },
   { path: "/volunteer-request/add", element: <VolunteerRequestAdd /> }, 
 
+  //benefiacaries
+  { path: "/benefciaries", element: <Benefciaries /> },
+  { path: "/benefciaries/:id", element: <New /> },
+  { path: "/benefciaries/:id/new", element: <New /> },
+
   //benefiacarieyRequest
   { path: "/beneficiaryRequest", element: <BeneficiaryRequest /> },
+  { path: "/beneficiaryRequestDetails/:id", element: <BeneficiaryRequestDetails /> },
+  { path: "/beneficiary-request/add", element: <BeneficiaryRequestAdd /> }, 
 
   // Funds Campaigns
   { path: "/fundsCampaigns", element: <FundsCampaigns /> },

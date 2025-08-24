@@ -24,7 +24,7 @@ const theme = createTheme({
 
 const Cards = ({ 
   id,
-  imageUrl = "../../../assets/person.jpg",
+  imageUrl,
   imageHeight = 180,
   title,
   description,
@@ -36,12 +36,16 @@ const Cards = ({
   showArchive = true,
   showActivate = true
 }) => {
-  const handleArchive = async () =>{
+
+  const fallbackImage = "/assets/person.jpg"; // 🔥 صورة افتراضية بدل المسار الطويل
+
+  const handleArchive = async () => {
+    if (!id) return; // 🔥 ما يعمل كول إذا ما في id
     try {
       const response = await api.post(`/campaigns/archive/${id}`);
       if (response.status === 200) {
         alert("Campaign archived successfully!");
-        onArchiveSuccess(id);
+        onArchiveSuccess && onArchiveSuccess(id);
       }
     } catch (error) {
       console.error("Error archiving campaign:", error);
@@ -50,11 +54,12 @@ const Cards = ({
   };
 
   const handleActivate = async () => {
+    if (!id) return; // 🔥 ما يعمل كول إذا ما في id
     try {
       const response = await api.post(`/campaigns/activate/${id}`);
       if (response.status === 200) {
         alert("Campaign activated successfully!");
-        onActivateSuccess(id); 
+        onActivateSuccess && onActivateSuccess(id); 
       }
     } catch (error) {
       console.error("Error activating campaign:", error);
@@ -67,7 +72,7 @@ const Cards = ({
       <Card sx={{ 
         width: 380,
         minHeight: 420,
-        backgroundColor:  '#d2b48c', 
+        backgroundColor: '#d2b48c', 
         display: 'flex',
         flexDirection: 'column',
         borderRadius: '12px',
@@ -81,8 +86,8 @@ const Cards = ({
         <CardMedia
           component="img"
           height={imageHeight}
-          image={imageUrl}
-          alt={title}
+          image={imageUrl || fallbackImage} // 🔥 fallback image
+          alt={title || "No Title"}
           sx={{
             objectFit: 'cover',
             width: '100%',
@@ -92,10 +97,10 @@ const Cards = ({
         />
         <CardContent sx={{ flexGrow: 1 }}>
           <Typography gutterBottom variant="h5" component="div" sx={{ fontWeight: 'bold' }}>
-            {title}
+            {title || "بدون عنوان"} {/* 🔥 fallback title */}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: '1.6', minHeight: '60px' }}>
-            {description}
+            {description || "لا يوجد وصف"} {/* 🔥 fallback description */}
           </Typography>
         </CardContent>
         {showActions && (
@@ -104,32 +109,34 @@ const Cards = ({
               size="medium"
               variant="contained"
               color="primary"
-              onClick={onDetailsClick}
+              onClick={() => id && onDetailsClick && onDetailsClick(id)} // 🔥 يمنع الخطأ إذا ما في id
               sx={{ fontWeight: 'bold' }}
+              disabled={!id}
             >
               Details
             </Button>
-           {showActivate &&(
-            <Button
-              size="medium"
-              variant="contained"
-              color="success"
-              onClick={handleActivate}
-              sx={{ fontWeight: 'bold' }}
-              disabled={isActive}
-            >
-             Activate
-            </Button>
-           )}
-            {showArchive && (   // 🔥 الشرط هون
+            {showActivate && (
+              <Button
+                size="medium"
+                variant="contained"
+                color="success"
+                onClick={handleActivate}
+                sx={{ fontWeight: 'bold' }}
+                disabled={isActive || !id}
+              >
+                Activate
+              </Button>
+            )}
+            {showArchive && (
               <Button
                 size="medium"
                 variant="contained"
                 color="error"
                 onClick={handleArchive}
                 sx={{ fontWeight: 'bold' }}
+                disabled={!id}
               >
-               Archive
+                Archive
               </Button>
             )}
           </CardActions>
@@ -140,9 +147,9 @@ const Cards = ({
 };
 
 Cards.propTypes = {
-  id: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]), // 🔥 مو إجباري
+  title: PropTypes.string,
+  description: PropTypes.string,
   imageUrl: PropTypes.string,
   imageHeight: PropTypes.number,
   showActions: PropTypes.bool,
@@ -150,8 +157,8 @@ Cards.propTypes = {
   isActive: PropTypes.bool,
   onActivateSuccess: PropTypes.func,
   onArchiveSuccess: PropTypes.func,
-  showArchive: PropTypes.bool ,
-  showActivate:PropTypes.bool
+  showArchive: PropTypes.bool,
+  showActivate: PropTypes.bool
 };
 
 export default Cards;

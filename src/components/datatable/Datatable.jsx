@@ -1,13 +1,24 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { Button } from '@mui/material';
+import { Button, TextField, Box, Typography } from '@mui/material';
 
 const Datatable = ({ title, rows }) => {
+  const [searchText, setSearchText] = useState('');
+
+  // ⚡ useMemo قبل أي return
+  const filteredRows = useMemo(() => {
+    if (!rows || rows.length === 0) return [];
+    if (!searchText) return rows;
+    return rows.filter((row) =>
+      Object.values(row).some((val) =>
+        val?.toString().toLowerCase().includes(searchText.toLowerCase())
+      )
+    );
+  }, [rows, searchText]);
+
   if (!rows || rows.length === 0) return null;
 
-  // إنشاء الأعمدة تلقائياً من مفاتيح الصف الأول
   const columns = Object.keys(rows[0]).map((key) => {
-    // إذا كانت هناك حاجة لإضافة زر أو تخصيص، يمكن تعديل هنا
     if (key === 'actions') {
       return {
         field: key,
@@ -46,10 +57,16 @@ const Datatable = ({ title, rows }) => {
   });
 
   return (
-    <div className='datatable' style={{ height: 400 }}>
-      <h3>{title}</h3>
+    <Box className='datatable' sx={{ height: 500, width: '100%' }}>
+      <Typography variant="h6" sx={{ mb: 2 }}>{title}</Typography>
+      <TextField
+        placeholder="ابحث..."
+        value={searchText}
+        onChange={(e) => setSearchText(e.target.value)}
+        sx={{ mb: 2 }}
+      />
       <DataGrid
-        rows={rows}
+        rows={filteredRows}
         columns={columns}
         autoHeight
         hideFooter
@@ -66,7 +83,7 @@ const Datatable = ({ title, rows }) => {
           '& .MuiDataGrid-columnHeaders': { backgroundColor: '#343a40', color: 'white' },
         }}
       />
-    </div>
+    </Box>
   );
 };
 

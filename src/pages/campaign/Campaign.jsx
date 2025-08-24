@@ -34,7 +34,7 @@ const Campaign = () => {
           title: campaign.title, 
           description: campaign.description,
           imageUrl: campaign.image
-            ? `http://localhost:8000/storage/${campaign.image}`
+            ? `http://localhost:8000/storage/app/public/${campaign.image}`
             : null,
           isActive: campaign.status === 'active' 
         }));

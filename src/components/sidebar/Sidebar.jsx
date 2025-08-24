@@ -225,11 +225,11 @@ const Sidebar = () => {
                 <MenuIcon className='icon'/>
                 <span>Show Beneficiaries</span>
               </li>
-              <li onClick={() => handleNavigation('/beneficiariesRequest')}>
+              <li onClick={() => handleNavigation('/beneficiaryRequest')}>
                 <MarkEmailUnreadIcon className='icon'/>
                 <span>Benefit requests</span>
               </li>
-              <li onClick={() => handleNavigation('/beneficiaries/requests')}>
+              <li onClick={() => handleNavigation('/beneficiary-request/add')}>
                 <AddBoxIcon className='icon'/>
                 <span>Add Benefit request</span>
               </li>

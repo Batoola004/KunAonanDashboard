@@ -4,7 +4,7 @@ import Sidebar from '../../components/sidebar/Sidebar';
 import Navbar from '../../components/navbar/Navbar';
 import EditDataBox from '../../components/editableDataBox/EditDataBox';
 import PeopleButton from '../../components/peopleButton/PeopleButton';
-import Datatable from '../../components/datatable/Datatable';
+import InfoBox from '../../components/infoBox/InfoBox';
 import './campaign_details.scss';
 import { Box, CircularProgress, Alert, Snackbar, Alert as MuiAlert } from '@mui/material';
 import api from '../../api/axios';
@@ -36,7 +36,7 @@ const Campaign_details = () => {
           description_ar: apiData.description_ar,
           target_amount: parseFloat(apiData.goal_amount),
           collected_amount: parseFloat(apiData.collected_amount),
-          status: apiData.status, // archived أو active
+          status: apiData.status,
           image: apiData.image 
                   ? `http://localhost:8000/storage/${apiData.image}` 
                   : 'https://via.placeholder.com/300',
@@ -83,8 +83,14 @@ const Campaign_details = () => {
         response = await api.get(`/campaigns/${id}/getDonators`);
       }
 
-      const data = response.data?.data || [];
-      setTableRows(data.map((item, index) => ({ id: item.id || index, ...item })));
+      let data = response.data?.data || [];
+
+      // تجاهل مفتاح pivot عند المتطوعين
+      if (type === 'volunteers') {
+        data = data.map(({ pivot, ...rest }) => rest);
+      }
+
+      setTableRows(data);
 
       const titleMap = {
         beneficiaries: 'المستفيدون',
@@ -147,24 +153,6 @@ const Campaign_details = () => {
     }
   };
 
-  const tableColumnsMap = {
-    beneficiaries: [
-      { field: 'id', headerName: 'ID', width: 70 },
-      { field: 'name', headerName: 'الاسم', width: 150 },
-      { field: 'phone', headerName: 'الهاتف', width: 130 },
-    ],
-    volunteers: [
-      { field: 'id', headerName: 'ID', width: 70 },
-      { field: 'name', headerName: 'الاسم', width: 150 },
-      { field: 'skills', headerName: 'المهارات', width: 200 },
-    ],
-    donators: [
-      { field: 'id', headerName: 'ID', width: 70 },
-      { field: 'name', headerName: 'الاسم', width: 150 },
-      { field: 'amount', headerName: 'المبلغ', width: 120 },
-    ]
-  };
-
   if (loading) return <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}><CircularProgress /></Box>;
   if (error) return <Box sx={{ p: 3 }}><Alert severity="error">{error}</Alert></Box>;
   if (!campaign) return <Box sx={{ p: 3 }}><Alert severity="warning">لم يتم العثور على الحملة</Alert></Box>;
@@ -207,10 +195,10 @@ const Campaign_details = () => {
             ) : tableRows.length === 0 ? (
               <Alert severity="info">لا توجد بيانات لعرضها</Alert>
             ) : (
-              <Datatable 
+              <InfoBox 
+                data={tableRows} 
                 title={tableTitle} 
-                columns={tableColumnsMap[activeTable]} 
-                rows={tableRows} 
+                showDetailsButton={false} 
               />
             )}
           </Box>

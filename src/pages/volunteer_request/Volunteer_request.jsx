@@ -11,7 +11,7 @@ const VolunteerRequest = () => {
   const [activeFilter, setActiveFilter] = useState('pending'); 
   const [volunteersData, setVolunteersData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [actionLoading, setActionLoading] = useState(false); // Loading لتحديث الحالة
+  const [actionLoading, setActionLoading] = useState(false); 
   const navigate = useNavigate();
 
   const filterButtons = [
@@ -38,7 +38,6 @@ const VolunteerRequest = () => {
     fetchVolunteers();
   }, [activeFilter]);
 
-  // دالة تحديث الحالة
   const handleUpdateStatus = async (id, status) => {
     setActionLoading(true);
     try {
@@ -47,14 +46,14 @@ const VolunteerRequest = () => {
         reason = prompt("ادخل سبب الرفض:");
         if(reason === null) {
           setActionLoading(false);
-          return; // إذا ضغط المستخدم إلغاء
+          return; 
         }
       }
-      await api.put(`http://127.0.0.1:8000/api/volunteer_request/updateStatus/${id}`, {
+      await api.put(`/volunteer_request/updateStatus/${id}`, {
         status,
         reason_of_rejection: reason
       });
-      // تحديث البيانات مباشرة في الصفحة
+      
       setVolunteersData(prev => prev.map(v => v.id === id ? {...v, status, reason_of_rejection: reason} : v));
     } catch (error) {
       console.error('Error updating status:', error);
