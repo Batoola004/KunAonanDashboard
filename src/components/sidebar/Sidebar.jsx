@@ -285,6 +285,10 @@ const Sidebar = () => {
                 <AddModeratorIcon className='icon'/>
                 <span>Support team</span>
               </li>
+              <li onClick={() => handleNavigation('/boxes')}>
+                <AddModeratorIcon className='icon'/>
+                <span>Boxes</span>
+              </li>
             </>
           )}
 

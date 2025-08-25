@@ -32,6 +32,9 @@ import BeneficiaryRequestDetails from "./pages/beneficiaryRequestDetails/Benefic
 import BeneficiaryRequestAdd from "./pages/beneficiaryRequestAdd/BeneficiaryRequestAdd";
 import BeneficiaryDetails from "./pages/beneficiaryDetails/BeneficiaryDetails";
 import Boxes from "./pages/boxes/Boxes";
+import BoxStat from "./pages/boxState/BoxStat";
+import BoxDetails from "./pages/boxdetails/Boxdetails"; 
+import BoxCampaignStat from "./pages/boxCampaignStat/BoxCampaignStat";
 
 const router = createBrowserRouter([
   // الصفحات الرئيسية
@@ -69,14 +72,13 @@ const router = createBrowserRouter([
   { path: "/volunteer-request/:id", element: <VolunteerRequestDetails /> },
   { path: "/volunteer-request/add", element: <VolunteerRequestAdd /> }, 
 
-  //benefiacaries
+  //beneficiaries
   { path: "/beneficiaries", element: <Benefciaries /> },
   { path: "/beneficiaries/:id", element: <New /> },
   { path: "/beneficiaries/:id/new", element: <New /> },
   { path: "/beneficiaryDetails", element: <BeneficiaryDetails /> },
 
-
-  //benefiacarieyRequest
+  //beneficiaryRequest
   { path: "/beneficiaryRequest", element: <BeneficiaryRequest /> },
   { path: "/beneficiaryRequestDetails/:id", element: <BeneficiaryRequestDetails /> },
   { path: "/beneficiary-request/add", element: <BeneficiaryRequestAdd /> }, 
@@ -98,14 +100,16 @@ const router = createBrowserRouter([
   { path: "/guarnteesAdd", element: <GuarnteesAdd /> },
   { path: "/guarnteesArchive", element: <GuarnteesArchive /> },
   
-  //Funds
+  // Boxes
   { path: "/boxes", element: <Boxes /> },
-  
+  { path: "/boxstate/:id", element: <BoxStat /> },
+  { path: "/boxdetails", element: <BoxDetails /> }, 
+  { path: "/boxCampaignStat/:id", element: <BoxCampaignStat /> },
 
   // Emails
   { path: "/emails", element: <Emails /> } ,
 
-  //Reports
+  // Reports
   { path: "/reports", element: <Reports /> },
   { path: "/reportsAdd", element: <ReportsAdd /> }
 ]);

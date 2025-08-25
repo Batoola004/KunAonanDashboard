@@ -35,7 +35,7 @@ const InfoBoxWithDelete = ({
   const [selectedIds, setSelectedIds] = useState([]);
 
   const columns = data.length > 0 
-    ? Object.keys(data[0]).map(key => ({
+    ? Object.keys(data[0]).filter(k => k !== 'id').map(key => ({
         field: key,
         headerName: key.replace(/_/g, ' ')
       })) 
@@ -48,23 +48,19 @@ const InfoBoxWithDelete = ({
   };
 
   const handleSelectAll = () => {
-    if (selectedIds.length === data.length) {
-      setSelectedIds([]);
-    } else {
-      setSelectedIds(data.map(row => row.id));
-    }
+    if (selectedIds.length === data.length) setSelectedIds([]);
+    else setSelectedIds(data.map(row => row.id));
   };
 
   const handleDeleteClick = () => {
     if (onDelete && selectedIds.length > 0) {
-      const selectedRows = data.filter(row => selectedIds.includes(row.id));
-      onDelete(selectedRows);
+      onDelete(selectedIds); // تمرير مصفوفة IDs فقط
       setSelectedIds([]);
     }
   };
 
   return (
-    <Box sx={{ p: 3, backgroundColor: '#rgba(0,0,0,0.05)', width: '100%' }}>
+    <Box sx={{ p: 3, backgroundColor: 'rgba(0,0,0,0.05)', width: '100%' }}>
       {showTitle && (
         <Typography 
           variant={titleVariant} 
@@ -79,11 +75,7 @@ const InfoBoxWithDelete = ({
         <Table sx={{ minWidth: 650 }} aria-label="data table">
           <TableHead sx={{ 
             backgroundColor: colors.headerBg,
-            '& .MuiTableCell-root': {
-              color: colors.headerText,
-              fontWeight: 'bold',
-              whiteSpace: 'nowrap'
-            }
+            '& .MuiTableCell-root': { color: colors.headerText, fontWeight: 'bold', whiteSpace: 'nowrap' }
           }}>
             <TableRow>
               <TableCell padding="checkbox">
@@ -94,9 +86,7 @@ const InfoBoxWithDelete = ({
                   sx={{ color: colors.headerText }}
                 />
               </TableCell>
-              {columns.map((column) => (
-                <TableCell key={column.field}>{column.headerName}</TableCell>
-              ))}
+              {columns.map((column) => <TableCell key={column.field}>{column.headerName}</TableCell>)}
             </TableRow>
           </TableHead>
 
@@ -104,10 +94,8 @@ const InfoBoxWithDelete = ({
             {data.map((row, index) => (
               <TableRow 
                 key={row.id || index}
-                sx={{ 
-                  backgroundColor: index % 2 === 0 ? colors.rowBg : colors.evenRowBg,
-                  '& .MuiTableCell-root': { color: colors.textColor, whiteSpace: 'nowrap' }
-                }}
+                sx={{ backgroundColor: index % 2 === 0 ? colors.rowBg : colors.evenRowBg,
+                      '& .MuiTableCell-root': { color: colors.textColor, whiteSpace: 'nowrap' } }}
               >
                 <TableCell padding="checkbox">
                   <Checkbox

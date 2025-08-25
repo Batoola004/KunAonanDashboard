@@ -19,7 +19,7 @@ const RechargeUsers = () => {
           id: user.id,
           name: user.name || 'N/A',
           phone: user.contact || 'N/A', 
-          balance: parseFloat(user.balance) || 0 
+          balance: user.balance || 0 
         }));
         setUsers(formattedUsers);
       } catch (error) {

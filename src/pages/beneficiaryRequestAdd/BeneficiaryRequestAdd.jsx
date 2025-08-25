@@ -31,9 +31,8 @@ const BeneficiaryRequestAdd = () => {
     ]
   });
 
-  const [subCategories, setSubCategories] = useState([]); // 🔹 لتخزين الفئات الفرعية
+  const [subCategories, setSubCategories] = useState([]); 
 
-  // دالة تحديث أي input
   const handleChange = async (e) => {
     const { name, value, type, checked } = e.target;
     const updatedValue = type === 'checkbox' ? checked : value;
@@ -47,8 +46,8 @@ const BeneficiaryRequestAdd = () => {
     if (name === 'main_category') {
       try {
         const response = await api.get(`/category/getAll/${value}`);
-        setSubCategories(response.data.data); // ✅ حفظ الفئات الفرعية
-        setFormData((prev) => ({ ...prev, sub_category: '' })); // إعادة ضبط الفئة الفرعية
+        setSubCategories(response.data.data); 
+        setFormData((prev) => ({ ...prev, sub_category: '' })); 
       } catch (err) {
         console.error('خطأ في جلب الفئات الفرعية:', err);
         setSubCategories([]);
@@ -65,10 +64,8 @@ const BeneficiaryRequestAdd = () => {
   const handleSubmit = async (e) => {
   e.preventDefault();
   try {
-    // نسخ البيانات
     const dataToSend = { ...formData };
 
-    // تأكيد أن تاريخ الميلاد محفوظ بصيغة yyyy-mm-dd
     if (dataToSend.birth_date) {
       const date = new Date(dataToSend.birth_date);
       const yyyy = date.getFullYear();
@@ -186,7 +183,6 @@ const BeneficiaryRequestAdd = () => {
               <input type="text" name="phone" value={formData.phone} onChange={handleChange} />
             </div>
 
-            {/* 🔹 الفئة الرئيسية */}
             <div className="formGroup">
               <label>الفئة الرئيسية</label>
               <select name="main_category" value={formData.main_category} onChange={handleChange} required>
@@ -222,7 +218,6 @@ const BeneficiaryRequestAdd = () => {
               <textarea name="notes" value={formData.notes} onChange={handleChange}></textarea>
             </div>
 
-            {/* تفاصيل إضافية */}
             <h3>تفاصيل إضافية</h3>
             {formData.details.map((detail, index) => (
               <div key={index} className="formGroup">

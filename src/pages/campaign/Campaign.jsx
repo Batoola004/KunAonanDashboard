@@ -16,7 +16,7 @@ const Campaign = () => {
 
   const fetchCampaigns = async (filter) => {
     setLoading(true);
-    let url = '/campaigns/getAll'; // الافتراضي كل الحملات
+    let url = '/campaigns/getAll';
 
     if (filter !== 'all') {
       const categoryMap = { Health: 1, Build: 2, Education: 3 };

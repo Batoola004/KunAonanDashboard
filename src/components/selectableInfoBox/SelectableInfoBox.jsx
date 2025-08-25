@@ -41,9 +41,9 @@ const SelectableInfoBox = ({ data, selectedItems, setSelectedItems }) => {
         autoHeight={useAutoHeight}
         disableRowSelectionOnClick
         sx={{
-          '& .MuiDataGrid-row:nth-of-type(odd)': { bgcolor: '#fafafa' },
+          '& .MuiDataGrid-row:nth-of-type(odd)': { bgcolor: '#d2b48c' },
           '& .MuiDataGrid-row:hover': { bgcolor: '#f1f1f1' },
-          borderRadius: 2,
+          borderRadius: 10,
           border: '1px solid #ddd',
           '& .MuiDataGrid-columnHeaders': {
             bgcolor: '#f5f5f5',
