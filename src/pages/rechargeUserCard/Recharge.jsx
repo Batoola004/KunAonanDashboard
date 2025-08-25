@@ -4,19 +4,19 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import Sidebar from '../../components/sidebar/Sidebar';
 import Navbar from '../../components/navbar/Navbar';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom'; 
 import api from '../../api/axios'; 
 import "./recharge.scss";
 
 const Recharge = () => {
   const location = useLocation();
+  const navigate = useNavigate(); 
   const userData = location.state?.user; 
 
   const [username, setUsername] = useState(userData?.name || '');
   const [amount, setAmount] = useState('');
   const [balance, setBalance] = useState(userData?.balance || 0);
 
-  // تحديث الرصيد بشكل مباشر عند تغير المستخدم
   useEffect(() => {
     if (userData) {
       setUsername(userData.name);
@@ -33,12 +33,14 @@ const Recharge = () => {
         amount: parseFloat(amount),
       });
 
-      // تحديث الرصيد محلياً بعد نجاح العملية
       const newBalance = balance + parseFloat(amount);
       setBalance(newBalance);
       setAmount('');
 
       alert(`تم شحن ${amount} دولار بنجاح للمستخدم ${username}`);
+      
+      navigate('/recargingUsers');  
+
     } catch (error) {
       console.error('Error during recharge:', error);
       alert('حدث خطأ أثناء الشحن، حاول مرة أخرى.');

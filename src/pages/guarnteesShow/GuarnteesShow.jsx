@@ -6,6 +6,7 @@ import CardList from '../../components/cardList/CardList';
 import api from '../../api/axios'; 
 import './guarnteesShow.scss';
 import Filter from '../../components/filters/Filter';
+import { CircularProgress, Box } from '@mui/material';
 
 const GuarnteesShow = () => {
   const navigate = useNavigate();
@@ -14,10 +15,10 @@ const GuarnteesShow = () => {
   const [activeCategory, setActiveCategory] = useState("all"); 
   const [categories, setCategories] = useState([]);
 
-  
+  // جلب الفئات
   const fetchCategories = async () => {
     try {
-      const response = await api.get('/category/getAll/Sponsorship');
+      const response = await api.get('/category/getAll/Sponsorship'); // endpoint مباشر
       if (response.data && response.data.data) {
         const dataArray = Array.isArray(response.data.data)
           ? response.data.data
@@ -29,24 +30,24 @@ const GuarnteesShow = () => {
     }
   };
 
+  // جلب الكفالات
   const fetchSponsorships = async (categoryId) => {
     setLoading(true);
     try {
       let response;
       if (categoryId === "all") {
-        response = await api.get('/sponsorship/byCreationDate');
+        response = await api.get('/sponsorship/byCreationDate'); // endpoint مباشر
       } else {
-        response = await api.get(`/sponsorship/category/${categoryId}`);
+        response = await api.get(`/sponsorship/category/${categoryId}`); // endpoint مباشر
       }
 
       if (response.data && response.data.data) {
         const formattedData = response.data.data.map((item) => ({
           id: item.id,
           title: item.sponsorship_name,
-          description: item.description || "لا يوجد وصف متاح.",
           imageUrl: item.image?.startsWith("http") 
             ? item.image 
-            : `http://localhost:8000/${item.image}`,
+            : `/storage/app/public/${item.image}`, 
         }));
         setSponsorships(formattedData);
       } else {
@@ -102,7 +103,9 @@ const GuarnteesShow = () => {
 
         <div className='cardsContainer'>
           {loading ? (
-            <p>جارٍ تحميل البيانات...</p>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+              <CircularProgress />
+            </Box>
           ) : sponsorships.length > 0 ? (
             <CardList 
               cardsData={sponsorships} 

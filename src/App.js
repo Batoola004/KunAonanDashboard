@@ -27,9 +27,12 @@ import ReportsAdd from './pages/reportsAdd/ReportsAdd'
 import CategoryAdd from "./pages/categoryAdd/CategoryAdd";
 import CategoryShow from "./pages/categoryShow/CategoryShow";
 import BeneficiaryRequest from "./pages/beneficiaryRequest/BeneficiaryRequest";
-import Benefciaries from "./pages/benefciaries/Benefciaries";
+import Benefciaries from "./pages/beneficiaries/Benefciaries";
 import BeneficiaryRequestDetails from "./pages/beneficiaryRequestDetails/BeneficiaryRequestDetails";
 import BeneficiaryRequestAdd from "./pages/beneficiaryRequestAdd/BeneficiaryRequestAdd";
+import BeneficiaryDetails from "./pages/beneficiaryDetails/BeneficiaryDetails";
+import Boxes from "./pages/boxes/Boxes";
+
 const router = createBrowserRouter([
   // الصفحات الرئيسية
   { path: "/", element: <Login1 /> },
@@ -67,9 +70,11 @@ const router = createBrowserRouter([
   { path: "/volunteer-request/add", element: <VolunteerRequestAdd /> }, 
 
   //benefiacaries
-  { path: "/benefciaries", element: <Benefciaries /> },
-  { path: "/benefciaries/:id", element: <New /> },
-  { path: "/benefciaries/:id/new", element: <New /> },
+  { path: "/beneficiaries", element: <Benefciaries /> },
+  { path: "/beneficiaries/:id", element: <New /> },
+  { path: "/beneficiaries/:id/new", element: <New /> },
+  { path: "/beneficiaryDetails", element: <BeneficiaryDetails /> },
+
 
   //benefiacarieyRequest
   { path: "/beneficiaryRequest", element: <BeneficiaryRequest /> },
@@ -92,6 +97,10 @@ const router = createBrowserRouter([
   { path: "/guarnteesDetails/:id", element: <GuarnteesDetails /> },
   { path: "/guarnteesAdd", element: <GuarnteesAdd /> },
   { path: "/guarnteesArchive", element: <GuarnteesArchive /> },
+  
+  //Funds
+  { path: "/boxes", element: <Boxes /> },
+  
 
   // Emails
   { path: "/emails", element: <Emails /> } ,

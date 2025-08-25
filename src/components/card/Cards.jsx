@@ -27,7 +27,6 @@ const Cards = ({
   imageUrl,
   imageHeight = 180,
   title,
-  description,
   showActions = true,
   onDetailsClick,
   isActive = false,
@@ -37,10 +36,10 @@ const Cards = ({
   showActivate = true
 }) => {
 
-  const fallbackImage = "/assets/person.jpg"; // 🔥 صورة افتراضية بدل المسار الطويل
+  const fallbackImage = "/assets/person.jpg";
 
   const handleArchive = async () => {
-    if (!id) return; // 🔥 ما يعمل كول إذا ما في id
+    if (!id) return;
     try {
       const response = await api.post(`/campaigns/archive/${id}`);
       if (response.status === 200) {
@@ -54,7 +53,7 @@ const Cards = ({
   };
 
   const handleActivate = async () => {
-    if (!id) return; // 🔥 ما يعمل كول إذا ما في id
+    if (!id) return;
     try {
       const response = await api.post(`/campaigns/activate/${id}`);
       if (response.status === 200) {
@@ -70,8 +69,8 @@ const Cards = ({
   return (
     <ThemeProvider theme={theme}>
       <Card sx={{ 
-        width: 380,
-        minHeight: 420,
+        width: 300,
+        minHeight: 400, 
         backgroundColor: '#d2b48c', 
         display: 'flex',
         flexDirection: 'column',
@@ -86,7 +85,7 @@ const Cards = ({
         <CardMedia
           component="img"
           height={imageHeight}
-          image={imageUrl || fallbackImage} // 🔥 fallback image
+          image={imageUrl || fallbackImage}
           alt={title || "No Title"}
           sx={{
             objectFit: 'cover',
@@ -97,10 +96,7 @@ const Cards = ({
         />
         <CardContent sx={{ flexGrow: 1 }}>
           <Typography gutterBottom variant="h5" component="div" sx={{ fontWeight: 'bold' }}>
-            {title || "بدون عنوان"} {/* 🔥 fallback title */}
-          </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: '1.6', minHeight: '60px' }}>
-            {description || "لا يوجد وصف"} {/* 🔥 fallback description */}
+            {title || "بدون عنوان"}
           </Typography>
         </CardContent>
         {showActions && (
@@ -109,7 +105,7 @@ const Cards = ({
               size="medium"
               variant="contained"
               color="primary"
-              onClick={() => id && onDetailsClick && onDetailsClick(id)} // 🔥 يمنع الخطأ إذا ما في id
+              onClick={() => id && onDetailsClick && onDetailsClick(id)}
               sx={{ fontWeight: 'bold' }}
               disabled={!id}
             >
@@ -147,9 +143,8 @@ const Cards = ({
 };
 
 Cards.propTypes = {
-  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]), // 🔥 مو إجباري
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   title: PropTypes.string,
-  description: PropTypes.string,
   imageUrl: PropTypes.string,
   imageHeight: PropTypes.number,
   showActions: PropTypes.bool,

@@ -5,7 +5,6 @@ import { Button, TextField, Box, Typography } from '@mui/material';
 const Datatable = ({ title, rows }) => {
   const [searchText, setSearchText] = useState('');
 
-  // ⚡ useMemo قبل أي return
   const filteredRows = useMemo(() => {
     if (!rows || rows.length === 0) return [];
     if (!searchText) return rows;

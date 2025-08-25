@@ -19,6 +19,7 @@ const Filter = ({
         spacing={spacing}
         direction={direction}
         justifyContent={justify}
+        wrap="nowrap"   // يمنع التفاف الأزرار
       >
         {buttons.map((button) => (
           <Grid item key={button.value || button.text}>

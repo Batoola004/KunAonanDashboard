@@ -66,7 +66,6 @@ const VolunteerInfoCard = ({ data }) => {
         <CardContent>
           <Stack spacing={2}>
 
-            {/* المعلومات الشخصية */}
             <Typography variant="h6" color="#155e5d" sx={{ mt: 2 }}>
               المعلومات الشخصية
             </Typography>
@@ -82,7 +81,6 @@ const VolunteerInfoCard = ({ data }) => {
               </Box>
             </Box>
 
-            {/* المعلومات المهنية */}
             <Typography variant="h6" color="#155e5d" sx={{ mt: 3 }}>
               المعلومات المهنية
             </Typography>
@@ -96,7 +94,6 @@ const VolunteerInfoCard = ({ data }) => {
               </Box>
             </Box>
 
-            {/* معلومات التطوع */}
             <Typography variant="h6" color="#155e5d" sx={{ mt: 3 }}>
               معلومات التطوع
             </Typography>
@@ -128,7 +125,6 @@ const VolunteerInfoCard = ({ data }) => {
               </Box>
             </Box>
 
-            {/* الأيام والأنواع */}
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mt: 2 }}>
               <Box sx={{ flex: 1, minWidth: 200 }}>
                 <Typography><strong>الأيام المتاحة:</strong></Typography>
@@ -152,7 +148,6 @@ const VolunteerInfoCard = ({ data }) => {
               </Box>
             </Box>
 
-            {/* ملاحظات إضافية */}
             {data.notes && (
               <>
                 <Typography variant="h6" color="#155e5d" sx={{ mt: 3 }}>

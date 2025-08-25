@@ -16,7 +16,6 @@ const BeneficiaryRequestDetails = () => {
   const [actionLoading, setActionLoading] = useState(false);
   const navigate = useNavigate();
 
-  // جلب بيانات الطلب
   useEffect(() => {
     const fetchBeneficiary = async () => {
       setLoading(true);
@@ -32,7 +31,6 @@ const BeneficiaryRequestDetails = () => {
     fetchBeneficiary();
   }, [id]);
 
-  // تحديث الحالة (قبول أو رفض)
   const updateStatus = async (status) => {
     if (
       status === 'rejected' &&

@@ -36,7 +36,6 @@ const ImageUploadBox = ({
     const file = event.target.files?.[0];
     if (!file) return;
 
-    // استخدم URL.createObjectURL لعرض الصورة بسرعة
     setPreview(URL.createObjectURL(file));
 
     if (onImageSelected) {

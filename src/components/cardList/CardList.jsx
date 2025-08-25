@@ -28,7 +28,6 @@ const CardList = ({ cardsData, onCardClick, setCardsData, showArchive = true, sh
               <Cards
                 id={card.id}
                 title={card.title}
-                description={card.description}
                 imageUrl={card.imageUrl}
                 isActive={card.isActive}
                 onDetailsClick={() => onCardClick && onCardClick(card.id)}
@@ -54,7 +53,6 @@ CardList.propTypes = {
     PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
       title: PropTypes.string,
-      description: PropTypes.string,
       imageUrl: PropTypes.string,
       isActive: PropTypes.bool
     })

@@ -52,8 +52,8 @@ const FundsCampaigns = () => {
         }
       }
     ];
-  // Campaign data with financial details
-  const campaigns = [
+
+    const campaigns = [
     {
       id: 1,
       title: "Orphan Education Campaign",

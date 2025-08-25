@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Paper,
@@ -9,43 +9,57 @@ import {
   TableHead,
   TableRow,
   Typography,
-  Button
+  Button,
+  Checkbox
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 
-const InfoBox = ({ 
+const InfoBoxWithDelete = ({ 
   data = [],
   title = 'قائمة البيانات',
   showTitle = true,
   titleVariant = 'h5',
-  showDetailsButton = true,
-  detailsButtonText = 'details',
   colors = {
     headerBg: '#155e5d',
     headerText: '#ffffff',
     rowBg: '#d1bca0ff',
     evenRowBg: '#d2b48c',
     textColor: '#000000',
-    buttonBg: '#3c8583ff',
-    buttonHover: '#155e5d',
+    buttonBg: '#e53935',
+    buttonHover: '#b71c1c',
     buttonText: '#ffffff',
     paperBg: '#ffffff',
     titleColor: '#155e5d'
   },
-  onDetailsClick 
+  onDelete
 }) => {
-  const navigate = useNavigate();
+  const [selectedIds, setSelectedIds] = useState([]);
 
-  const columns = data.length > 0 ? Object.keys(data[0]).map(key => ({
-    field: key,
-    headerName: key.replace(/_/g, ' ')
-  })) : [];
+  const columns = data.length > 0 
+    ? Object.keys(data[0]).map(key => ({
+        field: key,
+        headerName: key.replace(/_/g, ' ')
+      })) 
+    : [];
 
-  const handleDetailsClick = (row) => {
-    if (onDetailsClick) {
-      onDetailsClick(row);
+  const handleSelectRow = (id) => {
+    setSelectedIds(prev =>
+      prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
+    );
+  };
+
+  const handleSelectAll = () => {
+    if (selectedIds.length === data.length) {
+      setSelectedIds([]);
     } else {
-      navigate(`/details`, { state: { rowData: row } });
+      setSelectedIds(data.map(row => row.id));
+    }
+  };
+
+  const handleDeleteClick = () => {
+    if (onDelete && selectedIds.length > 0) {
+      const selectedRows = data.filter(row => selectedIds.includes(row.id));
+      onDelete(selectedRows);
+      setSelectedIds([]);
     }
   };
 
@@ -60,7 +74,7 @@ const InfoBox = ({
           {title}
         </Typography>
       )}
-      
+
       <TableContainer component={Paper} elevation={3} sx={{ backgroundColor: colors.paperBg, overflowX: 'auto' }}>
         <Table sx={{ minWidth: 650 }} aria-label="data table">
           <TableHead sx={{ 
@@ -72,10 +86,17 @@ const InfoBox = ({
             }
           }}>
             <TableRow>
+              <TableCell padding="checkbox">
+                <Checkbox
+                  checked={selectedIds.length === data.length && data.length > 0}
+                  indeterminate={selectedIds.length > 0 && selectedIds.length < data.length}
+                  onChange={handleSelectAll}
+                  sx={{ color: colors.headerText }}
+                />
+              </TableCell>
               {columns.map((column) => (
                 <TableCell key={column.field}>{column.headerName}</TableCell>
               ))}
-              {showDetailsButton && <TableCell>الإجراءات</TableCell>}
             </TableRow>
           </TableHead>
 
@@ -88,36 +109,42 @@ const InfoBox = ({
                   '& .MuiTableCell-root': { color: colors.textColor, whiteSpace: 'nowrap' }
                 }}
               >
+                <TableCell padding="checkbox">
+                  <Checkbox
+                    checked={selectedIds.includes(row.id)}
+                    onChange={() => handleSelectRow(row.id)}
+                  />
+                </TableCell>
                 {columns.map((column) => (
                   <TableCell key={`${row.id || index}-${column.field}`}>
                     {row[column.field] !== undefined ? row[column.field] : '-'}
                   </TableCell>
                 ))}
-
-                {showDetailsButton && (
-                  <TableCell>
-                    <Button 
-                      variant="contained"
-                      size="small"
-                      onClick={() => handleDetailsClick(row)}
-                      sx={{
-                        backgroundColor: colors.buttonBg,
-                        color: colors.buttonText,
-                        '&:hover': { backgroundColor: colors.buttonHover },
-                        fontWeight: 'bold',
-                      }}
-                    >
-                      {detailsButtonText}
-                    </Button>
-                  </TableCell>
-                )}
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+
+      {selectedIds.length > 0 && (
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+          <Button 
+            variant="contained"
+            size="small"
+            onClick={handleDeleteClick}
+            sx={{
+              backgroundColor: colors.buttonBg,
+              color: colors.buttonText,
+              '&:hover': { backgroundColor: colors.buttonHover },
+              fontWeight: 'bold',
+            }}
+          >
+            حذف {selectedIds.length}
+          </Button>
+        </Box>
+      )}
     </Box>
   );
 };
 
-export default InfoBox;
+export default InfoBoxWithDelete;

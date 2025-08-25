@@ -1,9 +1,19 @@
-.filter{
-        height: 60px;
-        color: white;
-        display: flex;
-        font-size: 15px;
-        align-items: center;
-        background-color: #155E5D;
-        border-bottom: 1px solid  lightgray;
-    }
+.filter {
+    height: 60px;
+    color: white;
+    display: flex;
+    align-items: center;
+    background-color: #155E5D;
+    border-bottom: 1px solid lightgray;
+    font-size: 15px;
+    padding: 0 10px;
+}
+
+/* فقط لأزرار الفلترة */
+.filter-buttons-container {
+    overflow-x: auto;       /* التمرير الأفقي */
+    white-space: nowrap;    /* منع التفاف العناصر */
+    width: 100%;
+    display: flex;          /* وضع الأزرار في صف واحد */
+    align-items: center;
+}
