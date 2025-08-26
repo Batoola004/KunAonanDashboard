@@ -52,7 +52,6 @@ const BoxCampaignStat = () => {
       const response = await api.post('/transaction/spend', payload);
       console.log('صرف ناجح:', response.data);
 
-      // تحديث الرصيد محلياً
       setCampaignData((prev) => ({
         ...prev,
         current_balance: (prev.current_balance ?? 0) - amount,

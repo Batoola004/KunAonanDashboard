@@ -99,7 +99,7 @@ const Campaign_details = () => {
         await api.post(`/campaigns/${id}/deleteVolunteers`, { volunteer_ids: ids });
       }
 
-      await handleButtonClick(activeTable); // إعادة تحميل الجدول بعد الحذف
+      await handleButtonClick(activeTable); 
       setSuccessMsg('تم الحذف بنجاح ✅');
     } catch (err) {
       console.error(err);
@@ -107,7 +107,6 @@ const Campaign_details = () => {
     }
   };
 
-  // إضافة عناصر غير مصنفة
   const handleAddSelectedToCampaign = async (ids) => {
     try {
       if (!ids || ids.length === 0) return;
