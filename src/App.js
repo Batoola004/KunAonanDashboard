@@ -4,14 +4,13 @@ import Campaign from "./pages/campaign/Campaign";
 import New from "./pages/new/New";
 import Volunteer from "./pages/volunteer/Volunteer";
 import Single from "./pages/single/Single";
-import Donators from "./pages/donators/Donators";
+import Donors from "./pages/donators/Donators";
 import CampaignAdd from "./pages/campaign_add/CampaignAdd";
 import CampaignArchive from "./pages/campaign_archive/CampaignArchive";
 import Campaign_details from "./pages/campaign_details/Campaign_details";
 import VolunteerRequest from "./pages/volunteer_request/Volunteer_request";
 import VolunteerRequestDetails from "./pages/volunteerRequestDetails/VolunteerRequestDetails";
 import VolunteerRequestAdd from "./pages/volunteerRequestAdd/VolunteerRequestAdd"; 
-import FundsCampaigns from "./pages/fundsCampaigns/FundsCampaigns";
 import Recharge from "./pages/rechargeUserCard/Recharge";
 import RechargeUsers from "./pages/recargingUsers/RechargeUsers";
 import GuarnteesShow from "./pages/guarnteesShow/GuarnteesShow";
@@ -35,6 +34,8 @@ import Boxes from "./pages/boxes/Boxes";
 import BoxStat from "./pages/boxState/BoxStat";
 import BoxDetails from "./pages/boxdetails/Boxdetails"; 
 import BoxCampaignStat from "./pages/boxCampaignStat/BoxCampaignStat";
+import Donations from "./pages/donations/Donations";
+import Exchanges from "./pages/exchanges/Exchanges"
 
 const router = createBrowserRouter([
   // الصفحات الرئيسية
@@ -59,8 +60,7 @@ const router = createBrowserRouter([
   { path: "/campaign_details/:id", element: <Campaign_details /> },
 
   // Donators
-  { path: "/donators", element: <Donators /> },
-  { path: "/donators/:id", element: <New /> },
+  { path: "/donators", element: <Donors /> },
 
   // Volunteer
   { path: "/volunteer", element: <Volunteer /> },
@@ -83,11 +83,6 @@ const router = createBrowserRouter([
   { path: "/beneficiaryRequestDetails/:id", element: <BeneficiaryRequestDetails /> },
   { path: "/beneficiary-request/add", element: <BeneficiaryRequestAdd /> }, 
 
-  // Funds Campaigns
-  { path: "/fundsCampaigns", element: <FundsCampaigns /> },
-  { path: "/fundsCampaigns/:id", element: <New /> },
-  { path: "/fundsCampaigns/:id/new", element: <New /> },
-
   // Recharge
   { path: "/recharge", element: <Recharge /> },
   { path: "/recharge/:id", element: <New /> },
@@ -106,9 +101,13 @@ const router = createBrowserRouter([
   { path: "/boxdetails", element: <BoxDetails /> }, 
   { path: "/boxCampaignStat/:id", element: <BoxCampaignStat /> },
 
+  //donations and exchanges
+  { path: "/donations", element: <Donations /> },
+  { path: "/exchanges", element: <Exchanges /> } ,
+
   // Emails
   { path: "/emails", element: <Emails /> } ,
-
+  
   // Reports
   { path: "/reports", element: <Reports /> },
   { path: "/reportsAdd", element: <ReportsAdd /> }

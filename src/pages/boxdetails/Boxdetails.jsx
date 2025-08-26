@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom'; // ⬅️ أضفنا useNavigate
+import { useLocation, useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/sidebar/Sidebar';
 import Navbar from '../../components/navbar/Navbar';
 import { Box, CircularProgress, Typography, Card, CardContent } from '@mui/material';
@@ -11,7 +11,7 @@ import './boxdetails.scss';
 
 const BoxDetails = () => {
   const location = useLocation();
-  const navigate = useNavigate(); // ⬅️ تعريف النافيغيت
+  const navigate = useNavigate();
   const { boxType } = location.state || {};
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -88,7 +88,13 @@ const BoxDetails = () => {
 
   const handleCardClick = (item) => {
     if (boxType === "campaign") {
-      navigate(`/boxCampaignStat/${item.id}`); 
+      navigate(`/boxCampaignStat/${item.id}`);
+    } else if (boxType === "sponsorship") {
+      // نمرر campaign_id من الكفالة
+      navigate(`/boxCampaignStat/${item.campaign_id}`);
+    } else if (boxType === "human") {
+      // نمرر campaign_id من الحالة الإنسانية
+      navigate(`/boxCampaignStat/${item.campaign_id}`);
     }
   };
 
@@ -108,8 +114,8 @@ const BoxDetails = () => {
             ) : (
               data.map((item) => (
                 <Card
-                  key={item.id}
-                  onClick={() => handleCardClick(item)} // ⬅️ أضفنا onClick
+                  key={item.id || item.sponsorship_id || item.human_case_id}
+                  onClick={() => handleCardClick(item)}
                   sx={{
                     width: 220,
                     height: 220,

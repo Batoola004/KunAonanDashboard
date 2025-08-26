@@ -253,37 +253,17 @@ const Sidebar = () => {
           </div>
           {expandedSections.funds && (
             <>
-              <li onClick={() => handleNavigation('/fundsCampaigns')}>
-                <DateRangeIcon className='icon'/>
-                <span>Campaigns</span>
-              </li>
-              <li onClick={() => handleNavigation('/fundsHumCases')}>
-                <AccessibleIcon className='icon'/>
-                <span>Humanitarian cases</span>
-              </li>
-              <li onClick={() => handleNavigation('/fundsGuaranties')}>
-                <Diversity1Icon className='icon'/>
-                <span>Guarantees</span>
-              </li>
-              <li onClick={() => handleNavigation('/fundsGeneralDonations')}>
-                <InventoryIcon className='icon'/>
-                <span>General Donations</span>
-              </li>
-              <li onClick={() => handleNavigation('/fundsExpiations')}>
-                <InventoryIcon className='icon'/>
-                <span>Expiations</span>
-              </li>
-              <li onClick={() => handleNavigation('/fundsHealth')}>
+            <li onClick={() => handleNavigation('/donators')}>
                 <HealthAndSafetyIcon className='icon'/>
-                <span>Health</span>
+                <span>All Donators</span>
               </li>
-              <li onClick={() => handleNavigation('/fundsOrphans')}>
+              <li onClick={() => handleNavigation('/exchanges')}>
+                <HealthAndSafetyIcon className='icon'/>
+                <span>Exchages</span>
+              </li>
+              <li onClick={() => handleNavigation('/donations')}>
                 <PersonIcon className='icon'/>
-                <span>Orphans</span>
-              </li>
-              <li onClick={() => handleNavigation('/fundsSupportTeam')}>
-                <AddModeratorIcon className='icon'/>
-                <span>Support team</span>
+                <span>Donations</span>
               </li>
               <li onClick={() => handleNavigation('/boxes')}>
                 <AddModeratorIcon className='icon'/>

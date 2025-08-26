@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Sidebar from '../../components/sidebar/Sidebar';
 import Navbar from '../../components/navbar/Navbar';
-import { Box, Typography, CircularProgress, Alert, Paper, Grid } from '@mui/material';
+import { Box, Typography, CircularProgress, Alert, Paper, Grid, TextField, Button } from '@mui/material';
 import InboxIcon from '@mui/icons-material/Inbox';
 import api from '../../api/axios';
 import './boxstat.scss';
@@ -15,6 +15,7 @@ const BoxStat = () => {
   const [boxData, setBoxData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [withdrawAmount, setWithdrawAmount] = useState('');
 
   useEffect(() => {
     const fetchBoxData = async () => {
@@ -30,6 +31,43 @@ const BoxStat = () => {
     };
     fetchBoxData();
   }, [id]);
+
+  const handleWithdraw = async () => {
+    const amount = parseFloat(withdrawAmount);
+    if (isNaN(amount) || amount <= 0) {
+      alert('يرجى إدخال مبلغ صالح');
+      return;
+    }
+
+    let currentBalance = boxData.current_balance ?? 0;
+    if (amount > currentBalance) {
+      alert('المبلغ المدخل أكبر من الرصيد الحالي');
+      return;
+    }
+
+    try {
+      const payload = {
+        box_id: boxData.id,
+        campaign_id: null,
+        amount: amount
+      };
+      const response = await api.post('/transaction/spend', payload);
+      console.log('صرف ناجح:', response.data);
+
+      // تحديث الرصيد محلياً
+      setBoxData((prev) => ({
+        ...prev,
+        current_balance: (prev.current_balance ?? 0) - amount,
+        total_exchanges: (prev.total_exchanges ?? 0) + amount
+      }));
+
+      setWithdrawAmount('');
+      alert('تم صرف المبلغ بنجاح!');
+    } catch (err) {
+      console.error('فشل الصرف:', err);
+      alert('فشل الصرف، حاول مرة أخرى');
+    }
+  };
 
   if (loading)
     return (
@@ -109,7 +147,34 @@ const BoxStat = () => {
             </Grid>
           </Grid>
 
-          {/* الرسم البياني الدائري */}
+          {/* مربع الإدخال وزر الصرف */}
+          <Box
+            sx={{
+              mt: 5,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              gap: 2
+            }}
+          >
+            <TextField
+              //label="أدخل مبلغ الصرف"
+              type="number"
+              value={withdrawAmount}
+              onChange={(e) => setWithdrawAmount(e.target.value)}
+              sx={{ width: { xs: '100%', sm: 200 } }}
+            />
+            <Button
+              variant="contained"
+              color="error"
+              onClick={handleWithdraw}
+              sx={{ height: 56, width: { xs: '100%', sm: 120 } }}
+            >
+              صرف
+            </Button>
+          </Box>
+
           <Box sx={{ mt:6, height: 350 }}>
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>

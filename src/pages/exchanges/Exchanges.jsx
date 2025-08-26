@@ -1,36 +1,36 @@
 import React, { useEffect, useState } from 'react';
-import './donators.scss';
+import './exchanges.scss';
 import Sidebar from '../../components/sidebar/Sidebar';
 import Navbar from '../../components/navbar/Navbar';
 import InfoBox from '../../components/infoBox/InfoBox';
 import { Box, CircularProgress, Alert } from '@mui/material';
 import api from '../../api/axios';
 
-const Donors = () => {
-  const [donations, setDonors] = useState([]);
+const Exchanges = () => {
+  const [donations, setExchanges] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchDonors = async () => {
+    const fetchExchanges = async () => {
       try {
-        const response = await api.get("/transaction/AllDonors");
-        setDonors(response.data.donors || []);
+        const response = await api.get("/transaction/AllExchanges");
+        setExchanges(response.data.exchanges || []);
       } catch (err) {
         console.error(err);
-        setError("فشل جلب المتبرعين ");
+        setError("فشل جلب بيانات الصرف");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchDonors();
+    fetchExchanges();
   }, []);
 
   return (
-    <div className="donors">
+    <div className="exchanges">
       <Sidebar />
-      <div className="donorsContainer">
+      <div className="exchangesContainer">
         <Navbar />
         <Box sx={{ p: 3, width: '100%' }}>
           {loading && (
@@ -45,7 +45,7 @@ const Donors = () => {
           )}
           {!loading && !error && (
             <InfoBox
-              title="قائمة المتبرعين وكل نشاطاتهم"
+              title="قائمة المصروفات"
               data={donations}
               showDetailsButton={false}  
               colors={{
@@ -65,4 +65,4 @@ const Donors = () => {
   );
 };
 
-export default Donors;
+export default Exchanges;
