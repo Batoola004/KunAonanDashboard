@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/sidebar/Sidebar';
 import Navbar from '../../components/navbar/Navbar';
 import Filter from '../../components/filters/Filter';
@@ -11,6 +12,7 @@ const Benefciaries = () => {
   const [beneficiaries, setBeneficiaries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState('sorted');
+  const navigate = useNavigate(); // <<< نستخدمه للتنقل
 
   const fetchBeneficiaries = async (filter = 'sorted') => {
     try {
@@ -47,6 +49,11 @@ const Benefciaries = () => {
     }
   ];
 
+  // دالة التنقل للصفحة التفاصيل
+  const handleDetailsClick = (beneficiaryId) => {
+    navigate(`/beneficiaryDetails/${beneficiaryId}`);
+  };
+
   return (
     <div className='volunteer'>
       <Sidebar />
@@ -76,6 +83,7 @@ const Benefciaries = () => {
             data={beneficiaries}
             title={activeFilter === 'sorted' ? "المستفيدين المفروزين" : "المستفيدين حسب الأولوية"}
             detailsButtonText="تفاصيل"
+            onDetailsClick={handleDetailsClick} // <<< نمرّر الدالة للزر
           />
         )}
       </div>

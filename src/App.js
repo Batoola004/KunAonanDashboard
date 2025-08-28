@@ -77,6 +77,7 @@ const router = createBrowserRouter([
   { path: "/beneficiaries/:id", element: <New /> },
   { path: "/beneficiaries/:id/new", element: <New /> },
   { path: "/beneficiaryDetails", element: <BeneficiaryDetails /> },
+  { path: "/beneficiaryDetails/:id", element: <New /> },
 
   //beneficiaryRequest
   { path: "/beneficiaryRequest", element: <BeneficiaryRequest /> },

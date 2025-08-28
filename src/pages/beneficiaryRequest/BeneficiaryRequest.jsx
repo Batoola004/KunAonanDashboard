@@ -5,13 +5,14 @@ import Navbar from '../../components/navbar/Navbar';
 import Filter from '../../components/filters/Filter';
 import InfoBox from '../../components/infoBox/InfoBox';
 import api from '../../api/axios';
+import { CircularProgress, Box } from '@mui/material';
 import './beneficiaryRequest.scss';
 
 const BeneficiaryRequest = () => {
   const [activeFilter, setActiveFilter] = useState('pending'); 
   const [beneficiariesData, setBeneficiariesData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [actionLoading, setActionLoading] = useState(false);
+  const [actionLoadingId, setActionLoadingId] = useState(null); // لتحديد الصف الجاري تحديثه
   const [filterCounts, setFilterCounts] = useState({});
   const navigate = useNavigate();
 
@@ -58,29 +59,31 @@ const BeneficiaryRequest = () => {
   }, [activeFilter]);
 
   const handleUpdateStatus = async (id, status) => {
-    setActionLoading(true);
-    try {
-      let reason = null;
-      if (status === 'rejected') {
-        reason = prompt("ادخل سبب الرفض:");
-        if (reason === null) {
-          setActionLoading(false);
-          return;
-        }
-      }
+    let reasonAr = '';
+    let reasonEn = '';
 
+    if (status === 'rejected') {
+      reasonAr = prompt('ادخل سبب الرفض بالعربية:');
+      reasonEn = prompt('Enter rejection reason in English:');
+      if (!reasonAr || !reasonEn) return;
+    }
+
+    setActionLoadingId(id);
+    try {
       await api.put(`/beneficiary_request/updateStatus/${id}`, {
         status,
-        reason_of_rejection: reason
+        reason_of_rejection_ar: status === 'rejected' ? reasonAr : '',
+        reason_of_rejection_en: status === 'rejected' ? reasonEn : ''
       });
 
-      setBeneficiariesData(prev => prev.map(v => v.id === id ? { ...v, status, reason_of_rejection: reason } : v));
+      // تحديث الصف مباشرة في الواجهة
+      setBeneficiariesData(prev => prev.map(v => v.id === id ? { ...v, status, reason_of_rejection_ar: reasonAr, reason_of_rejection_en: reasonEn } : v));
       fetchFilterCounts();
     } catch (error) {
       console.error('Error updating status:', error);
       alert('❌ فشل تحديث الحالة');
     } finally {
-      setActionLoading(false);
+      setActionLoadingId(null);
     }
   };
 
@@ -104,20 +107,26 @@ const BeneficiaryRequest = () => {
         />
 
         {loading ? (
-          <p>جاري التحميل...</p>
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+            <CircularProgress />
+          </Box>
         ) : (
           <InfoBox 
             data={beneficiariesData} 
             title={`طلبات الاستفادة ${filterButtons.find(f => f.value === activeFilter)?.text || ''}`}
             detailsButtonText="عرض التفاصيل"
-            onDetailsClick={(row) => navigate(`/beneficiaryRequestDetails/${row.id}`)} // التعديل هنا
+            onDetailsClick={(row) => navigate(`/beneficiaryRequestDetails/${row.id}`)}
             actionButtons={(row) => (
               <div className="action-buttons">
                 {row.status !== 'accepted' && (
-                  <button disabled={actionLoading} onClick={() => handleUpdateStatus(row.id, 'accepted')}>قبول</button>
+                  <button disabled={actionLoadingId === row.id} onClick={() => handleUpdateStatus(row.id, 'accepted')}>
+                    {actionLoadingId === row.id ? <CircularProgress size={20} /> : 'قبول'}
+                  </button>
                 )}
                 {row.status !== 'rejected' && (
-                  <button disabled={actionLoading} onClick={() => handleUpdateStatus(row.id, 'rejected')}>رفض</button>
+                  <button disabled={actionLoadingId === row.id} onClick={() => handleUpdateStatus(row.id, 'rejected')}>
+                    {actionLoadingId === row.id ? <CircularProgress size={20} /> : 'رفض'}
+                  </button>
                 )}
               </div>
             )}

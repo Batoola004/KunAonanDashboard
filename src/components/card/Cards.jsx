@@ -25,6 +25,7 @@ const theme = createTheme({
 const Cards = ({ 
   id,
   imageUrl,
+  icon, // 👈 صار في دعم للأيقونة
   imageHeight = 180,
   title,
   showActions = true,
@@ -35,8 +36,6 @@ const Cards = ({
   showArchive = true,
   showActivate = true
 }) => {
-
-  const fallbackImage = "/assets/person.jpg";
 
   const handleArchive = async () => {
     if (!id) return;
@@ -82,23 +81,39 @@ const Cards = ({
           boxShadow: '0 6px 12px rgba(0,0,0,0.15)'
         }
       }}>
-        <CardMedia
-          component="img"
-          height={imageHeight}
-          image={imageUrl || fallbackImage}
-          alt={title || "No Title"}
-          sx={{
-            objectFit: 'cover',
-            width: '100%',
-            borderTopLeftRadius: '12px',
-            borderTopRightRadius: '12px'
-          }}
-        />
+        {icon ? (
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            height: imageHeight, 
+            backgroundColor: '#fff' 
+          }}>
+            {icon}
+          </div>
+        ) : (
+          imageUrl && (
+            <CardMedia
+              component="img"
+              height={imageHeight}
+              image={imageUrl}
+              alt={title || "No Title"}
+              sx={{
+                objectFit: 'cover',
+                width: '100%',
+                borderTopLeftRadius: '12px',
+                borderTopRightRadius: '12px'
+              }}
+            />
+          )
+        )}
+
         <CardContent sx={{ flexGrow: 1 }}>
           <Typography gutterBottom variant="h5" component="div" sx={{ fontWeight: 'bold' }}>
             {title || "بدون عنوان"}
           </Typography>
         </CardContent>
+
         {showActions && (
           <CardActions sx={{ padding: '16px', justifyContent: 'flex-end' }}>
             <Button
@@ -146,6 +161,7 @@ Cards.propTypes = {
   id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   title: PropTypes.string,
   imageUrl: PropTypes.string,
+  icon: PropTypes.node, // 👈 أيقونة React node
   imageHeight: PropTypes.number,
   showActions: PropTypes.bool,
   onDetailsClick: PropTypes.func,

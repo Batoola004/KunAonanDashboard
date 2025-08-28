@@ -8,6 +8,9 @@ import api from '../../api/axios';
 import { useNavigate } from 'react-router-dom';
 import { CircularProgress, Box, Alert } from '@mui/material';
 
+// أيقونات MUI 👇
+import { LocalHospital, Handyman, MenuBook, VolunteerActivism } from "@mui/icons-material";
+
 const Campaign = () => {
   const [cardsData, setCardsData] = useState([]);
   const [activeFilter, setActiveFilter] = useState('all');
@@ -26,15 +29,34 @@ const Campaign = () => {
 
     try {
       const res = await api.get(url);
-      const formattedData = res.data?.data?.map(campaign => ({
-        id: campaign.id,
-        title: campaign.title,
-        description: campaign.description,
-        imageUrl: campaign.image
-          ? `/storage/app/public/campaign_images/${campaign.image}`  
-          : 'https://via.placeholder.com/300',
-        isActive: campaign.status === 'active'
-      })) || [];
+
+      const formattedData = res.data?.data?.map(campaign => {
+        let icon;
+
+        // ربط الأيقونات بالتصنيفات
+        switch (campaign.category) {
+          case "Health":
+            icon = <LocalHospital sx={{ fontSize: 80, color: "red" }} />;
+            break;
+          case "Build":
+            icon = <Handyman sx={{ fontSize: 80, color: "green" }} />;
+            break;
+          case "Education":
+            icon = <MenuBook sx={{ fontSize: 80, color: "blue" }} />;
+            break;
+          default:
+            icon = <VolunteerActivism sx={{ fontSize: 80, color: "#155e5d" }} />;
+        }
+
+        return {
+          id: campaign.id,
+          title: campaign.title,
+          description: campaign.description,
+          icon: icon, // 👈 نستعمل الأيقونة بدل الصورة
+          isActive: campaign.status === 'active'
+        };
+      }) || [];
+
       setCardsData(formattedData);
     } catch (err) {
       console.error('Error fetching campaigns:', err);

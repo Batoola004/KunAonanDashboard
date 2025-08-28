@@ -5,6 +5,7 @@ import Navbar from '../../components/navbar/Navbar';
 import EditDataBox from '../../components/editableDataBox/EditDataBox';
 import PeopleButton from '../../components/peopleButton/PeopleButton';
 import InfoBoxWithDelete from '../../components/infoBoxWithDelete/InfoBoxWithDelete';
+import InfoBox from '../../components/infoBox/InfoBox';
 import { Box, CircularProgress, Alert, Snackbar, Alert as MuiAlert } from '@mui/material';
 import api from '../../api/axios';
 import './campaign_details.scss';
@@ -20,7 +21,6 @@ const Campaign_details = () => {
   const [error, setError] = useState(null);
   const [successMsg, setSuccessMsg] = useState('');
 
-  // جلب بيانات الحملة
   const fetchCampaignDetails = async () => {
     if (!id) return;
     setLoading(true);
@@ -28,33 +28,29 @@ const Campaign_details = () => {
       const response = await api.get(`/campaigns/${id}`);
       const apiData = response.data?.data;
       if (apiData) {
-        setCampaign({
-          id: apiData.id,
-          title_en: apiData.title_en,
-          title_ar: apiData.title_ar,
-          description_en: apiData.description_en,
-          description_ar: apiData.description_ar,
-          target_amount: parseFloat(apiData.goal_amount),
-          collected_amount: parseFloat(apiData.collected_amount),
-          status: apiData.status,
-          image: apiData.image ? `http://localhost:8000/storage/${apiData.image}` : 'https://via.placeholder.com/300',
-          progress: Math.round((parseFloat(apiData.collected_amount)/parseFloat(apiData.goal_amount))*100),
-          start_date: apiData.start_date,
-          end_date: apiData.end_date
-        });
+        setCampaign(apiData);
       } else setError('⚠️ لم يتم العثور على بيانات الحملة');
     } catch (err) {
       console.error(err);
       setError('فشل تحميل تفاصيل الحملة');
-    } finally { setLoading(false); }
+    } finally {
+      setLoading(false);
+    }
   };
 
-  useEffect(() => { fetchCampaignDetails(); }, [id]);
+  useEffect(() => {
+    fetchCampaignDetails();
+  }, [id]);
 
-  // جلب بيانات الجدول حسب النوع
   const handleButtonClick = async (type) => {
-    if (type === activeTable) { setActiveTable(null); return; }
-    setActiveTable(type); setTableLoading(true); setTableRows([]); setTableTitle('');
+    if (type === activeTable) {
+      setActiveTable(null);
+      return;
+    }
+    setActiveTable(type);
+    setTableLoading(true);
+    setTableRows([]);
+    setTableTitle('');
 
     try {
       let response, data = [];
@@ -66,9 +62,8 @@ const Campaign_details = () => {
 
       data = response.data?.data || response.data?.donors || response.data || [];
 
-      // ضبط id لكل صف
       const rowsWithId = data.map(r => ({
-        id: r.id, // <--- مهم ناخد id مباشرة
+        id: r.id || r.donation_id || r.beneficiary_id,
         ...r
       }));
 
@@ -85,10 +80,11 @@ const Campaign_details = () => {
     } catch (err) {
       console.error(err);
       setTableRows([]);
-    } finally { setTableLoading(false); }
+    } finally {
+      setTableLoading(false);
+    }
   };
 
-  // حذف العناصر المحددة
   const handleDeleteItems = async (ids) => {
     try {
       if (!ids || ids.length === 0) return;
@@ -99,7 +95,7 @@ const Campaign_details = () => {
         await api.post(`/campaigns/${id}/deleteVolunteers`, { volunteer_ids: ids });
       }
 
-      await handleButtonClick(activeTable); 
+      await handleButtonClick(activeTable);
       setSuccessMsg('تم الحذف بنجاح ✅');
     } catch (err) {
       console.error(err);
@@ -110,8 +106,10 @@ const Campaign_details = () => {
   const handleAddSelectedToCampaign = async (ids) => {
     try {
       if (!ids || ids.length === 0) return;
-      if (activeTable === 'unsortedBeneficiaries') await api.post(`/campaigns/${id}/addBeneficiaries`, { beneficiary_ids: ids });
-      else if (activeTable === 'unsortedVolunteers') await api.post(`/campaigns/${id}/addVolunteers`, { volunteer_ids: ids });
+      if (activeTable === 'unsortedBeneficiaries')
+        await api.post(`/campaigns/${id}/addBeneficiaries`, { beneficiary_ids: ids });
+      else if (activeTable === 'unsortedVolunteers')
+        await api.post(`/campaigns/${id}/addVolunteers`, { volunteer_ids: ids });
 
       await handleButtonClick(activeTable === 'unsortedBeneficiaries' ? 'beneficiaries' : 'volunteers');
       setSuccessMsg('تم الإضافة بنجاح ✅');
@@ -121,41 +119,70 @@ const Campaign_details = () => {
     }
   };
 
-  if (loading) return <Box sx={{ display:'flex', justifyContent:'center', mt:4 }}><CircularProgress /></Box>;
-  if (error) return <Box sx={{ p:3 }}><Alert severity="error">{error}</Alert></Box>;
-  if (!campaign) return <Box sx={{ p:3 }}><Alert severity="warning">لم يتم العثور على الحملة</Alert></Box>;
+  if (loading) return <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}><CircularProgress /></Box>;
+  if (error) return <Box sx={{ p: 3 }}><Alert severity="error">{error}</Alert></Box>;
+  if (!campaign) return <Box sx={{ p: 3 }}><Alert severity="warning">لم يتم العثور على الحملة</Alert></Box>;
 
   return (
     <div className='campaign_details'>
       <Sidebar />
       <div className="campaign_detailsContainer">
         <Navbar />
-        <EditDataBox campaign={campaign} onUpdate={()=>{}} disableEdit={campaign?.status==='archived'} />
 
-        <Box sx={{ display:'flex', justifyContent:'space-between', mt:4, gap:2, flexWrap:'wrap' }}>
-          <PeopleButton label="المستفيدون" count={activeTable==='beneficiaries'?tableRows.length:0} onClick={()=>handleButtonClick('beneficiaries')} active={activeTable==='beneficiaries'} />
-          <PeopleButton label="المتطوعون" count={activeTable==='volunteers'?tableRows.length:0} onClick={()=>handleButtonClick('volunteers')} active={activeTable==='volunteers'} />
-          <PeopleButton label="المتبرعون" count={activeTable==='donators'?tableRows.length:0} onClick={()=>handleButtonClick('donators')} active={activeTable==='donators'} />
-          <PeopleButton label="إضافة مستفيد" count={0} onClick={()=>handleButtonClick('unsortedBeneficiaries')} active={activeTable==='unsortedBeneficiaries'} sx={{ bgcolor:'#4caf50', color:'white' }} />
-          <PeopleButton label="إضافة متطوع" count={0} onClick={()=>handleButtonClick('unsortedVolunteers')} active={activeTable==='unsortedVolunteers'} sx={{ bgcolor:'#1976d2', color:'white' }} />
+        {/* ✅ ديناميكي: EditDataBox بياخد إندبوينتات */}
+        <EditDataBox
+          endpointGet={`/campaigns/${id}`}
+          endpointUpdate={`/campaigns/${id}/update`}
+          title="تفاصيل الحملة"
+          disableEdit={campaign?.status === 'archived'}
+          fields={[
+            { name: "title_ar", label: "اسم الحملة (عربي)", type: "text" },
+            { name: "title_en", label: "اسم الحملة (انكليزي)", type: "text" },
+            { name: "description_ar", label: "الوصف (عربي)", type: "textarea" },
+            { name: "description_en", label: "الوصف (انكليزي)", type: "textarea" },
+            { name: "goal_amount", label: "المبلغ المطلوب ($)", type: "number" },
+            { name: "start_date", label: "تاريخ البدء", type: "date" },
+            { name: "end_date", label: "تاريخ الانتهاء", type: "date" },
+            { name: "status", label: "الحالة", type: "select", options: [
+              { value: "active", label: "فعّالة" },
+              { value: "inactive", label: "غير فعّالة" },
+              { value: "archived", label: "مؤرشفة" }
+            ] }
+          ]}
+        />
+
+        {/* أزرار الأشخاص */}
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4, gap: 2, flexWrap: 'wrap' }}>
+          <PeopleButton label="المستفيدون" count={activeTable === 'beneficiaries' ? tableRows.length : 0} onClick={() => handleButtonClick('beneficiaries')} active={activeTable === 'beneficiaries'} />
+          <PeopleButton label="المتطوعون" count={activeTable === 'volunteers' ? tableRows.length : 0} onClick={() => handleButtonClick('volunteers')} active={activeTable === 'volunteers'} />
+          <PeopleButton label="المتبرعون" count={activeTable === 'donators' ? tableRows.length : 0} onClick={() => handleButtonClick('donators')} active={activeTable === 'donators'} />
+          <PeopleButton label="إضافة مستفيد" count={0} onClick={() => handleButtonClick('unsortedBeneficiaries')} active={activeTable === 'unsortedBeneficiaries'} sx={{ bgcolor: '#4caf50', color: 'white' }} />
+          <PeopleButton label="إضافة متطوع" count={0} onClick={() => handleButtonClick('unsortedVolunteers')} active={activeTable === 'unsortedVolunteers'} sx={{ bgcolor: '#1976d2', color: 'white' }} />
         </Box>
 
+        {/* عرض الجداول */}
         {activeTable && (
-          <Box sx={{ mt:3 }}>
+          <Box sx={{ mt: 3 }}>
             {tableLoading ? (
               <CircularProgress />
             ) : tableRows.length === 0 ? (
               <Alert severity="info">لا توجد بيانات لعرضها</Alert>
-            ) : (activeTable==='unsortedBeneficiaries' || activeTable==='unsortedVolunteers') ? (
+            ) : activeTable === 'donators' ? (
+              <InfoBox
+                data={tableRows}
+                title="المتبرعون"
+                showDetailsButton={false}
+              />
+            ) : (activeTable === 'unsortedBeneficiaries' || activeTable === 'unsortedVolunteers') ? (
               <InfoBoxWithDelete
                 data={tableRows}
-                title={activeTable==='unsortedBeneficiaries'?'إضافة مستفيدين':'إضافة متطوعين'}
+                title={activeTable === 'unsortedBeneficiaries' ? 'إضافة مستفيدين' : 'إضافة متطوعين'}
                 onDelete={handleAddSelectedToCampaign}
               />
             ) : (
               <InfoBoxWithDelete
                 data={tableRows}
-                title={activeTable==='beneficiaries'?'المستفيدون':'المتطوعون'}
+                title={activeTable === 'beneficiaries' ? 'المستفيدون' : 'المتطوعون'}
                 onDelete={handleDeleteItems}
               />
             )}
@@ -163,8 +190,8 @@ const Campaign_details = () => {
         )}
       </div>
 
-      <Snackbar open={!!successMsg} autoHideDuration={3000} onClose={()=>setSuccessMsg('')}>
-        <MuiAlert onClose={()=>setSuccessMsg('')} severity="success" sx={{ width:'100%' }}>{successMsg}</MuiAlert>
+      <Snackbar open={!!successMsg} autoHideDuration={3000} onClose={() => setSuccessMsg('')}>
+        <MuiAlert onClose={() => setSuccessMsg('')} severity="success" sx={{ width: '100%' }}>{successMsg}</MuiAlert>
       </Snackbar>
     </div>
   );

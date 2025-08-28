@@ -2,9 +2,12 @@ import React, { useState, useEffect } from 'react';
 import Sidebar from '../../components/sidebar/Sidebar';
 import Navbar from '../../components/navbar/Navbar';
 import api from '../../api/axios';
+import { useNavigate } from 'react-router-dom';
 import './beneficiaryRequestAdd.scss';
 
 const BeneficiaryRequestAdd = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: '',
     father_name: '',
@@ -31,23 +34,20 @@ const BeneficiaryRequestAdd = () => {
     ]
   });
 
-  const [subCategories, setSubCategories] = useState([]); 
+  const [subCategories, setSubCategories] = useState([]);
 
   const handleChange = async (e) => {
     const { name, value, type, checked } = e.target;
     const updatedValue = type === 'checkbox' ? checked : value;
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: updatedValue
-    }));
+    setFormData(prev => ({ ...prev, [name]: updatedValue }));
 
-    // إذا غيرنا الفئة الرئيسية → جيب الفئات الفرعية
+    // إذا غيرنا الفئة الرئيسية → جلب الفئات الفرعية
     if (name === 'main_category') {
       try {
         const response = await api.get(`/category/getAll/${value}`);
-        setSubCategories(response.data.data); 
-        setFormData((prev) => ({ ...prev, sub_category: '' })); 
+        setSubCategories(response.data.data);
+        setFormData(prev => ({ ...prev, sub_category: '' }));
       } catch (err) {
         console.error('خطأ في جلب الفئات الفرعية:', err);
         setSubCategories([]);
@@ -62,26 +62,31 @@ const BeneficiaryRequestAdd = () => {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    const dataToSend = { ...formData };
+    e.preventDefault();
+    try {
+      const dataToSend = { ...formData };
 
-    if (dataToSend.birth_date) {
-      const date = new Date(dataToSend.birth_date);
-      const yyyy = date.getFullYear();
-      const mm = String(date.getMonth() + 1).padStart(2, '0');
-      const dd = String(date.getDate()).padStart(2, '0');
-      dataToSend.birth_date = `${yyyy}-${mm}-${dd}`;
+      if (dataToSend.birth_date) {
+        const date = new Date(dataToSend.birth_date);
+        const yyyy = date.getFullYear();
+        const mm = String(date.getMonth() + 1).padStart(2, '0');
+        const dd = String(date.getDate()).padStart(2, '0');
+        dataToSend.birth_date = `${yyyy}-${mm}-${dd}`;
+      }
+
+      await api.post('/beneficiary_request/add', dataToSend);
+
+      // نافذة تأكيد قبل الانتقال
+      const ok = window.confirm('✅ تم إضافة طلب الاستفادة بنجاح. الانتقال لصفحة الطلبات؟');
+      if (ok) {
+        navigate('/beneficiaryRequest');
+      }
+
+    } catch (error) {
+      console.error('خطأ عند إضافة الطلب:', error);
+      alert('❌ فشل في إضافة الطلب');
     }
-
-    await api.post('/beneficiary_request/add', dataToSend);
-    alert('✅ تم إضافة طلب الاستفادة بنجاح');
-  } catch (error) {
-    console.error('خطأ عند إضافة الطلب:', error);
-    alert('❌ فشل في إضافة الطلب');
-  }
-};
-
+  };
 
   return (
     <div className="beneficiaryRequestAdd">
@@ -194,7 +199,6 @@ const BeneficiaryRequestAdd = () => {
               </select>
             </div>
 
-            {/* 🔹 الفئة الفرعية (من API) */}
             <div className="formGroup">
               <label>الفئة الفرعية</label>
               <select 
@@ -218,7 +222,7 @@ const BeneficiaryRequestAdd = () => {
               <textarea name="notes" value={formData.notes} onChange={handleChange}></textarea>
             </div>
 
-            <h3>تفاصيل إضافية</h3>
+            <h3>تفاصيل إضافية (يمكن كتابة لا يوجد)</h3>
             {formData.details.map((detail, index) => (
               <div key={index} className="formGroup">
                 <label>{detail.field_name}</label>
@@ -226,6 +230,7 @@ const BeneficiaryRequestAdd = () => {
                   type="text"
                   value={detail.field_value}
                   onChange={(e) => handleDetailsChange(index, 'field_value', e.target.value)}
+                  //placeholder="يمكن تركه فارغاً"
                 />
               </div>
             ))}
