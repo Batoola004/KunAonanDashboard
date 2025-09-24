@@ -96,7 +96,7 @@ const Reports = () => {
                       <td>{new Date(report.created_at).toLocaleString()}</td>
                       <td>
                         <a
-                          href={`http://localhost:8000/storage/${fileName}`}
+                          href={`http://localhost:8000/storage/app/public/reports/${fileName}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="downloadLink"

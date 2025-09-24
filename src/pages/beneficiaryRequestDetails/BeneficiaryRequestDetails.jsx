@@ -98,16 +98,17 @@ const BeneficiaryRequestDetails = () => {
         <Navbar />
 
         {loading ? (
-          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-            <CircularProgress />
-          </Box>
-        ) : error ? (
-          <Alert severity="error">{error}</Alert>
-        ) : beneficiary ? (
-          <BeneficiaryInfoCard data={beneficiary} />
-        ) : (
-          <Alert severity="warning">لم يتم العثور على بيانات المستفيد</Alert>
-        )}
+  <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
+    <CircularProgress size={40} thickness={4} />
+  </Box>
+) : error ? (
+  <Alert severity="error">{error}</Alert>
+) : beneficiary ? (
+  <BeneficiaryInfoCard data={beneficiary} />
+) : (
+  <Alert severity="warning">لم يتم العثور على بيانات المستفيد</Alert>
+)}
+
 
         {/* أزرار القبول والرفض */}
         <div

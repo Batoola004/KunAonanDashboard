@@ -35,7 +35,15 @@ import BoxStat from "./pages/boxState/BoxStat";
 import BoxDetails from "./pages/boxdetails/Boxdetails"; 
 import BoxCampaignStat from "./pages/boxCampaignStat/BoxCampaignStat";
 import Donations from "./pages/donations/Donations";
-import Exchanges from "./pages/exchanges/Exchanges"
+import Exchanges from "./pages/exchanges/Exchanges";
+import CurrentDonations from "./pages/currentDonations/CurrentDonations";
+import VolunteerDetails from "./pages/volunteer_details/Volunteer_details";
+import HumanCaseDetails from "./pages/humanterian_cases_details/Humanterian_cases_details";
+import HumanCases from "./pages/humaniterian_cases/Humaniterian_cases";
+import CasesArchive from "./pages/humaniterian_cases_archive/Humaniterian_cases_archive";
+import AddHumanCases from "./pages/humanterian_cases_request/Humanterian_cases_request";
+import Inkind from "./pages/InKind/Inkind";
+import Inkinddetails from "./pages/inkinddetails/Inkinddetails";
 
 const router = createBrowserRouter([
   // الصفحات الرئيسية
@@ -66,6 +74,7 @@ const router = createBrowserRouter([
   { path: "/volunteer", element: <Volunteer /> },
   { path: "/volunteer/:id", element: <New /> },
   { path: "/volunteer/:id/new", element: <New /> },
+  { path: "/volunteerDetails/:id", element: <VolunteerDetails /> },
 
   // Volunteer Requests
   { path: "/volunteer_request", element: <VolunteerRequest /> },
@@ -77,7 +86,7 @@ const router = createBrowserRouter([
   { path: "/beneficiaries/:id", element: <New /> },
   { path: "/beneficiaries/:id/new", element: <New /> },
   { path: "/beneficiaryDetails", element: <BeneficiaryDetails /> },
-  { path: "/beneficiaryDetails/:id", element: <New /> },
+  { path: "/beneficiaryDetails/:id", element: <BeneficiaryDetails /> },
 
   //beneficiaryRequest
   { path: "/beneficiaryRequest", element: <BeneficiaryRequest /> },
@@ -89,6 +98,12 @@ const router = createBrowserRouter([
   { path: "/recharge/:id", element: <New /> },
   { path: "/recargingUsers", element: <RechargeUsers /> },
   { path: "/recargingUsers/:id", element: <New /> },
+
+   //Humanitarian Cases
+  { path: "/HumanCases/", element: <HumanCases /> },
+  { path: "/HumanCaseDetails/:id", element: <HumanCaseDetails /> },
+  { path: "/AddHumanCases/", element: <AddHumanCases /> },
+   { path: "/CasesArchive/", element: <CasesArchive /> },
 
   // Guarntees
   { path: "/guarnteesShow", element: <GuarnteesShow /> },
@@ -105,6 +120,12 @@ const router = createBrowserRouter([
   //donations and exchanges
   { path: "/donations", element: <Donations /> },
   { path: "/exchanges", element: <Exchanges /> } ,
+  { path: "/currentDonations", element: <CurrentDonations /> } ,
+
+  //inkind
+  { path: "/inkind", element: <Inkind /> } ,
+    { path: "/inkind/:id", element: <Inkinddetails /> },
+
 
   // Emails
   { path: "/emails", element: <Emails /> } ,

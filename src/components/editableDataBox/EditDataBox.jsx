@@ -25,7 +25,7 @@ const VisuallyHiddenInput = styled('input')({
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
   '& .MuiOutlinedInput-root': {
-    backgroundColor: '#d1bca0ff',
+    backgroundColor: '#E5D2B1',
     borderRadius: '8px',
     '& fieldset': {
       borderColor: '#218483ff',
@@ -41,7 +41,7 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
 
 const EditDataBox = () => {
   const { id } = useParams();
-  const BOX_COLOR = '#d1bca0ff';
+  const BOX_COLOR = '#E5D2B1';
 
   const [editing, setEditing] = useState(false);
   const [campaignData, setCampaignData] = useState(null);

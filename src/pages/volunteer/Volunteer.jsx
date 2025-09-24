@@ -1,99 +1,88 @@
-import React from 'react'
-import "./volunteer.scss"
-import Sidebar from '../../components/sidebar/Sidebar'
-import Navbar from '../../components/navbar/Navbar'
-import Filter from '../../components/filters/Filter'
-import InfoBox from '../../components/infoBox/InfoBox'
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import './volunteer.scss';
+import Sidebar from '../../components/sidebar/Sidebar';
+import Navbar from '../../components/navbar/Navbar';
+import InfoBox from '../../components/infoBox/InfoBox';
+import { Box, CircularProgress, Alert } from '@mui/material';
+import api from '../../api/axios';
+import { useNavigate } from 'react-router-dom';
 
+const Volunteer = () => {
+  const [volunteers, setVolunteers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-export const Volunteer = () => {
-  const volunteersData = [
-    { id: 1, firstName: 'محمد', lastName: 'علي', age: 25, status: 'نشط' },
-    { id: 2, firstName: 'أحمد', lastName: 'خالد', age: 30 },
-    { id: 3, firstName: 'ليلى', lastName: 'محمود', age: 22, status: 'غير نشط' },
-    { id: 4, firstName: 'نور', lastName: 'حسن', age: 28, status: 'نشط' },
-  ];
+  useEffect(() => {
+    const fetchVolunteers = async () => {
+      try {
+        const response = await api.get("/volunteers");
+        const data = response.data.data || [];
 
-  const [activeFilter, setActiveFilter] = useState('all');
-  
-    const filterButtons = [
-      {
-        text: "all",
-        value: "all",
-        color: "primary",
-        hoverColor: "#e3f2fd",
-        activeTextColor: "#ffffff",
-        onClick: () => {
-          setActiveFilter('all');
-        }
-      },
-      {
-        text: "Type",
-        value: "Type",
-        color: "secondary",
-        hoverColor: "#f3e5f5",
-        activeTextColor: "#ffffff",
-        onClick: () => {
-          setActiveFilter('Type');
-        }
-      },
-      {
-        text: "Day",
-        value: "Day",
-        color: "success",
-        hoverColor: "#e8f5e9",
-        activeTextColor: "#ffffff",
-        onClick: () => {
-          setActiveFilter('Day');
-        }
+        const formattedVolunteers = data.map(v => ({
+          id: v.volunteer_id,
+          name: v.volunteer_name,
+          volunteering_types: v.volunteering_types.map(t => t.type_name).join(', '),
+        }));
+
+        setVolunteers(formattedVolunteers);
+      } catch (err) {
+        console.error(err);
+        setError("فشل جلب المتطوعين");
+      } finally {
+        setLoading(false);
       }
-    ];
+    };
+
+    fetchVolunteers();
+  }, []);
+
+  // دالة عند الضغط على زر التفاصيل
+  const handleDetailsClick = (volunteerId) => {
+    navigate(`/volunteerDetails/${volunteerId}`);
+  };
 
   return (
-    <div className='volunteer'>
-       <Sidebar />
-       <div className="volunteerContainer">
+    <div className="volunteer">
+      <Sidebar />
+      <div className="volunteerContainer">
         <Navbar />
-         <Filter
-          buttons={filterButtons}
-          activeFilter={activeFilter}
-          spacing={3}
-          buttonProps={{
-            sx: {
-              minWidth: '120px',
-              fontSize: '0.875rem'
-            }
-          }}
-        />          <InfoBox
-  volunteers={volunteersData}
-  columns={[
-    { field: 'id', headerName: 'رقم المتطوع' },
-    { 
-      field: 'fullName', 
-      headerName: 'الاسم الكامل',
-      valueGetter: (v) => `${v.firstName} ${v.lastName}`
-    },
-    { 
-      field: 'status', 
-      headerName: 'حالة التطوع',
-      valueGetter: (v) => (
-        <span style={{ 
-          color: v.status === 'نشط' ? 'green' : 
-                v.status === 'قيد المراجعة' ? 'orange' : 'red',
-          fontWeight: 'bold'
-        }}>
-          {v.status}
-        </span>
-      )
-    }
-  ]}
-  title="سجل المتطوعين"  // عنوان مخصص
-  titleVariant="h4"      // حجم أكبر للعنوان
-  showDetailsButton={true}
-/>
-            </div>
+        <Box sx={{ p: 3, width: '100%' }}>
+          {loading && (
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+              <CircularProgress />
+            </Box>
+          )}
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {error}
+            </Alert>
+          )}
+          {!loading && !error && (
+            <InfoBox
+              title="قائمة المتطوعين المفروزين"
+              data={volunteers}
+              showDetailsButton={true}  
+              onDetailsClick={handleDetailsClick} // تمرير الدالة للزر
+              columns={[
+                { key: 'name', label: 'اسم المتطوع' },
+                { key: 'volunteering_types', label: 'أنواع التطوع' },
+              ]}
+              colors={{
+                headerBg: '#165e5d',
+                headerText: '#ffffff',
+                rowBg: '#fffffa',
+                evenRowBg: '#fffff9',
+                textColor: '#000000',
+                paperBg: '#ffffff',
+                titleColor: '#155e5d',
+              }}
+            />
+          )}
+        </Box>
       </div>
-  )
-}
-export default Volunteer
+    </div>
+  );
+};
+
+export default Volunteer;

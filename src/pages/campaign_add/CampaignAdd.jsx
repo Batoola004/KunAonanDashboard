@@ -101,11 +101,11 @@ const CampaignAdd = () => {
           buttonProps={{ sx: { minWidth: '120px', fontSize: '0.875rem' } }}
         />
 
-        <InputBox width="500px" label="اسم الحملة" color="#ffffff" boxColor="#d2b48c" value={titleAr} onChange={(e) => setTitleAr(e.target.value)} />
-        <InputBox width="500px" label="Campaign name" color="#ffffff" boxColor="#d2b48c" value={titleEn} onChange={(e) => setTitleEn(e.target.value)} />
-        <InputBox width="500px" label="وصف الحملة" color="#ffffff" boxColor="#d1bca0ff" value={descAr} onChange={(e) => setDescAr(e.target.value)} />
-        <InputBox width="500px" label="Campaign description" color="#ffffff" boxColor="#d1bca0ff" value={descEn} onChange={(e) => setDescEn(e.target.value)} />
-        <InputBox width="200px" label="The requested amount" color="#ffffff" boxColor="#218483ff" value={goalAmount} onChange={(e) => setGoalAmount(e.target.value)} />
+        <InputBox width="500px" label="اسم الحملة" color="#ffffff" boxColor="#E5D2B1" value={titleAr} onChange={(e) => setTitleAr(e.target.value)} />
+        <InputBox width="500px" label="Campaign name" color="#ffffff" boxColor="#E5D2B1" value={titleEn} onChange={(e) => setTitleEn(e.target.value)} />
+        <InputBox width="500px" label="وصف الحملة" color="#ffffff" boxColor="#E5D2B1" value={descAr} onChange={(e) => setDescAr(e.target.value)} />
+        <InputBox width="500px" label="Campaign description" color="#ffffff" boxColor="#E5D2B1" value={descEn} onChange={(e) => setDescEn(e.target.value)} />
+        <InputBox width="200px" label="The requested amount" color="#ffffff" boxColor="#E5D2B1" value={goalAmount} onChange={(e) => setGoalAmount(e.target.value)} />
 
         <div className="dateField">
           <label>Start Date (yyyy-mm-dd)</label>

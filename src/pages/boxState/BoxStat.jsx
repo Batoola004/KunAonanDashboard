@@ -47,14 +47,13 @@ const BoxStat = () => {
 
     try {
       const payload = {
-        box_id: boxData.id,
+        box_id: boxData.box_id,
         campaign_id: null,
         amount: amount
       };
       const response = await api.post('/transaction/spend', payload);
       console.log('صرف ناجح:', response.data);
 
-      // تحديث الرصيد محلياً
       setBoxData((prev) => ({
         ...prev,
         current_balance: (prev.current_balance ?? 0) - amount,
@@ -82,14 +81,12 @@ const BoxStat = () => {
       </Box>
     );
 
-  // بيانات الرسم البياني الدائري
   const pieData = [
     { name: 'رصيد الصندوق الحالي', value: boxData.current_balance },
     { name: 'إجمالي التبرعات', value: boxData.total_donations },
     { name: 'إجمالي الصرفيات', value: boxData.total_exchanges },
   ];
 
-  // ألوان متدرجة لكل شريحة
   const COLORS = ['#2faeac', '#d2b48c', '#ec407a'];
 
   return (
@@ -167,12 +164,18 @@ const BoxStat = () => {
             />
             <Button
               variant="contained"
-              color="error"
               onClick={handleWithdraw}
-              sx={{ height: 56, width: { xs: '100%', sm: 120 } }}
+              sx={{
+                backgroundColor: '#2faeac', 
+                color: '#fff',               
+                '&:hover': {
+                  backgroundColor: '#155e5d'  
+                }
+              }}
             >
               صرف
             </Button>
+            
           </Box>
 
           <Box sx={{ mt:6, height: 350 }}>

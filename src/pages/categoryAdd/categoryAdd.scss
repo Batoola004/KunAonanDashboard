@@ -17,7 +17,7 @@
     .addCategoryForm {
       max-width: 500px;
       margin: 50px auto;
-      background-color: #d2b48c;
+      background-color: #E5D2B1;
       padding: 30px 35px;
       border-radius: 15px;
       box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
@@ -32,7 +32,7 @@
       h2 {
         text-align: center;
         margin-bottom: 25px;
-        color: #155e5d;
+        color: #165e5d;
         font-size: 1.8rem;
       }
 
@@ -53,7 +53,7 @@
         transition: border 0.3s ease;
 
         &:focus {
-          border-color: #155e5d;
+          border-color: #165e5d;
           outline: none;
         }
       }
@@ -61,7 +61,7 @@
       button {
         width: 100%;
         padding: 14px;
-        background-color: #155e5d;
+        background-color: #165e5d;
         color: #fff;
         border: none;
         border-radius: 8px;
@@ -85,7 +85,7 @@
         margin-top: 15px;
         text-align: center;
         font-weight: 500;
-        color: #155e5d;
+        color: #165e5d;
       }
     }
   }

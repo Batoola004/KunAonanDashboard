@@ -89,8 +89,8 @@ const Boxes = () => {
                   cursor: 'pointer',
                   borderRadius: 3,
                   background: index < 3
-                    ? 'linear-gradient(135deg, #d2b48c 0%, #a38761ff 100%)'
-                    : 'linear-gradient(135deg, #155e5d 0%, #2faeacff 100%)',
+                    ? 'linear-gradient(135deg, #E5D2B1 0%, #a38761ff 100%)'
+                    : 'linear-gradient(135deg, #165e5d 0%, #2faeacff 100%)',
                   color: '#fff',
                   transition: 'all 0.3s ease',
                   '&:hover': {

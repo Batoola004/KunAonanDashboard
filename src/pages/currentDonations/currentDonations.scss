@@ -1,0 +1,19 @@
+.currentDonations{
+    display: flex;
+    width: 100%;
+    background-color: white;
+    color: #616161;
+    width: 100%;
+    background-color: #F4F0EC;
+    background-image: url('../5.png');
+    background-repeat: repeat;
+    background-size: contain;
+    background-position: center; 
+    color: #616161;
+    min-height: 100vh;
+
+    .currentDonationsContainer{
+              flex: 5;
+              margin-left: 250px;
+    }
+}

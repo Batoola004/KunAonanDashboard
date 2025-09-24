@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/sidebar/Sidebar';
 import Navbar from '../../components/navbar/Navbar';
-import Filter from '../../components/filters/Filter';
 import './benefciaries.scss';
 import InfoBox from '../../components/infoBox/InfoBox';  
 import api from '../../api/axios';
@@ -12,7 +11,7 @@ const Benefciaries = () => {
   const [beneficiaries, setBeneficiaries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState('sorted');
-  const navigate = useNavigate(); // <<< نستخدمه للتنقل
+  const navigate = useNavigate(); 
 
   const fetchBeneficiaries = async (filter = 'sorted') => {
     try {
@@ -24,7 +23,8 @@ const Benefciaries = () => {
       }
 
       const response = await api.get(endpoint);
-      setBeneficiaries(response.data.data);
+      setBeneficiaries(response.data.data || []);
+      console.log("Beneficiaries data:", response.data.data); 
     } catch (error) {
       console.error('فشل في جلب بيانات المستفيدين:', error);
     } finally {
@@ -36,20 +36,6 @@ const Benefciaries = () => {
     fetchBeneficiaries(activeFilter);
   }, [activeFilter]);
 
-  const filterButtons = [
-    { 
-      text: "مفروزين", 
-      value: "sorted", 
-      onClick: () => setActiveFilter('sorted') 
-    },
-    { 
-      text: "حسب الأولوية", 
-      value: "priority", 
-      onClick: () => setActiveFilter('priority') 
-    }
-  ];
-
-  // دالة التنقل للصفحة التفاصيل
   const handleDetailsClick = (beneficiaryId) => {
     navigate(`/beneficiaryDetails/${beneficiaryId}`);
   };
@@ -59,18 +45,6 @@ const Benefciaries = () => {
       <Sidebar />
       <div className="volunteerContainer">
         <Navbar />
-        <Filter
-          buttons={filterButtons}
-          activeFilter={activeFilter}
-          spacing={3}
-          buttonProps={{
-            sx: {
-              minWidth: '140px',
-              fontSize: '0.9rem',
-              fontWeight: 'bold'
-            }
-          }}
-        />
 
         {loading ? (
           <Box 
@@ -83,7 +57,8 @@ const Benefciaries = () => {
             data={beneficiaries}
             title={activeFilter === 'sorted' ? "المستفيدين المفروزين" : "المستفيدين حسب الأولوية"}
             detailsButtonText="تفاصيل"
-            onDetailsClick={handleDetailsClick} // <<< نمرّر الدالة للزر
+            onDetailsClick={handleDetailsClick}
+            idField="beneficiary_id"  // ✅ المفتاح الصحيح لكل صف
           />
         )}
       </div>

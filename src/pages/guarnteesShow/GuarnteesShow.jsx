@@ -47,7 +47,7 @@ const GuarnteesShow = () => {
           title: item.sponsorship_name,
           imageUrl: item.image?.startsWith("http") 
             ? item.image 
-            : `/storage/app/public/${item.image}`, 
+            : `/storage/app/public/sponsorship_images/${item.image}`, 
         }));
         setSponsorships(formattedData);
       } else {

@@ -91,69 +91,23 @@ const Sidebar = () => {
           )}
 
           {/* DONATION TYPES SHOW */}
-          <div className="section-header" onClick={() => toggleSection('donationTypesShow')}>
+          <div className="section-header" onClick={() => toggleSection('human')}>
             <div className="title-wrapper">
-              <p className="title">DONATION TYPES SHOW</p>
-              {expandedSections.donationTypesShow ? 
+              <p className="title"> Humaterian Cases </p>
+              {expandedSections.human ? 
                 <ExpandLessIcon className="expand-icon" /> : 
                 <ExpandMoreIcon className="expand-icon" />}
             </div>
           </div>
-          {expandedSections.donationTypesShow && (
+          {expandedSections.human && (
             <>
-              <li onClick={() => handleNavigation('/donations/expiations')}>
+              <li onClick={() => handleNavigation('/HumanCases/')}>
                 <MenuIcon className='icon'/>
-                <span>Expiations</span>
+                <span>Show</span>
               </li>
-              <li onClick={() => handleNavigation('/donations/general')}>
+              <li onClick={() => handleNavigation('/AddHumanCases/')}>
                 <MenuIcon className='icon'/>
-                <span>General Donations</span>
-              </li>
-              <li onClick={() => handleNavigation('/donations/monetary')}>
-                <MenuIcon className='icon'/>
-                <span>Monetary donations</span>
-              </li>
-              <li onClick={() => handleNavigation('/donations/zakat')}>
-                <MenuIcon className='icon'/>
-                <span>Zakat</span>
-              </li>
-              <li onClick={() => handleNavigation('/donations/charitable')}>
-                <MenuIcon className='icon'/>
-                <span>Charitable donations</span>
-              </li>
-            </>
-          )}
-
-          {/* DONATION TYPES */}
-          <div className="section-header" onClick={() => toggleSection('donationTypes')}>
-            <div className="title-wrapper">
-              <p className="title">DONATION TYPES</p>
-              {expandedSections.donationTypes ? 
-                <ExpandLessIcon className="expand-icon" /> : 
-                <ExpandMoreIcon className="expand-icon" />}
-            </div>
-          </div>
-          {expandedSections.donationTypes && (
-            <>
-              <li onClick={() => handleNavigation('/donation-types/expiations')}>
-                <PermIdentityIcon className='icon'/>
-                <span>Expiations</span>
-              </li>
-              <li onClick={() => handleNavigation('/donation-types/general')}>
-                <PermIdentityIcon className='icon'/>
-                <span>General Donations</span>
-              </li>
-              <li onClick={() => handleNavigation('/donation-types/monetary')}>
-                <PermIdentityIcon className='icon'/>
-                <span>Monetary donations</span>
-              </li>
-              <li onClick={() => handleNavigation('/donation-types/zakat')}>
-                <PermIdentityIcon className='icon'/>
-                <span>Zakat</span>
-              </li>
-              <li onClick={() => handleNavigation('/donation-types/charitable')}>
-                <PermIdentityIcon className='icon'/>
-                <span>Charitable donations</span>
+                <span> Add</span>
               </li>
             </>
           )}
@@ -236,12 +190,6 @@ const Sidebar = () => {
             </>
           )}
 
-          {/* EXPIRATIONS
-          <li onClick={() => handleNavigation('/expiations')}>
-            <MenuIcon className='icon'/>
-            <span>Show Expiations</span>
-          </li> */}
-
           {/* FUNDS */}
           <div className="section-header" onClick={() => toggleSection('funds')}>
             <div className="title-wrapper">
@@ -269,36 +217,13 @@ const Sidebar = () => {
                 <AddModeratorIcon className='icon'/>
                 <span>Boxes</span>
               </li>
+              <li onClick={() => handleNavigation('/currentDonations')}>
+                <AddModeratorIcon className='icon'/>
+                <span>Recurring Donations</span>
+              </li>
             </>
           )}
 
-          {/* USERS */}
-          <div className="section-header" onClick={() => toggleSection('users')}>
-            <div className="title-wrapper">
-              <p className="title">USERS</p>
-              {expandedSections.users ? 
-                <ExpandLessIcon className="expand-icon" /> : 
-                <ExpandMoreIcon className="expand-icon" />}
-            </div>
-          </div>
-          {expandedSections.users && (
-            <>
-              <li onClick={() => handleNavigation('/donators')}>
-                <PersonIcon className='icon'/>
-                <span>Donators</span>
-              </li>
-        {/*هون بدي اعمل هدول الصفحات */}
-              <li onClick={() => handleNavigation('/volunteers')}>
-                <PersonIcon className='icon'/>
-                <span>Volunteers</span>
-              </li>
-              <li onClick={() => handleNavigation('/beneficiaries')}>
-                <PersonIcon className='icon'/>
-                <span>Beneficiaries</span>
-              </li>
-            </>
-          )}
-          
           {/*recharge card */}
 <div className="section-header" onClick={() => toggleSection('recharge')}>
   <div className="title-wrapper">
@@ -383,25 +308,7 @@ const Sidebar = () => {
           </li>
           
 </>)}
-           <div className="section-header" onClick={() => toggleSection('settings')}>
-  <div className="title-wrapper">
-    <p className="title">Settings</p>
-    {expandedSections.settings ? 
-      <ExpandLessIcon className="expand-icon" /> : 
-      <ExpandMoreIcon className="expand-icon" />}
-  </div>
-</div>
-{expandedSections.settings && (
-
-<>
-          {/* SETTINGS */}
-          <li onClick={() => handleNavigation('/settings')}>
-            <SettingsIcon className='icon'/>
-            <span>Settings</span>
-          </li>
-          
-</>)}
-
+       
         </ul>
       </div>
     </div>

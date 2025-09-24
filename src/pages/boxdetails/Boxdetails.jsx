@@ -66,9 +66,9 @@ const BoxDetails = () => {
   };
 
   const getIcon = () => {
-    if (boxType === "campaign") return <CampaignIcon sx={{ fontSize: 60, color: '#d2b48c' }} />;
-    if (boxType === "sponsorship") return <VolunteerActivismIcon sx={{ fontSize: 60, color: '#155e5d' }} />;
-    if (boxType === "human") return <HealingIcon sx={{ fontSize: 60, color: '#155e5d' }} />;
+    if (boxType === "campaign") return <CampaignIcon sx={{ fontSize: 60, color: '#E5D2B1' }} />;
+    if (boxType === "sponsorship") return <VolunteerActivismIcon sx={{ fontSize: 60, color: '#165e5d' }} />;
+    if (boxType === "human") return <HealingIcon sx={{ fontSize: 60, color: '#165e5d' }} />;
     return null;
   };
 
@@ -80,7 +80,7 @@ const BoxDetails = () => {
   };
 
   const getCardColor = () => {
-    if (boxType === "campaign") return '#155e5d';
+    if (boxType === "campaign") return '#165e5d';
     if (boxType === "sponsorship") return '#d2b48c';
     if (boxType === "human") return '#2c9290ff';
     return '#9e9e9e';

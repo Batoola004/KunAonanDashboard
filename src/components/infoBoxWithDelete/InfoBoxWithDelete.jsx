@@ -24,7 +24,7 @@ const InfoBoxWithDelete = ({
     rowBg: '#d1bca0ff',
     evenRowBg: '#d2b48c',
     textColor: '#000000',
-    buttonBg: '#e53935',
+    buttonBg: '#53e3b3ff',
     buttonHover: '#b71c1c',
     buttonText: '#ffffff',
     paperBg: '#ffffff',
@@ -127,7 +127,7 @@ const InfoBoxWithDelete = ({
               fontWeight: 'bold',
             }}
           >
-            حذف {selectedIds.length}
+            إضافة {selectedIds.length}
           </Button>
         </Box>
       )}

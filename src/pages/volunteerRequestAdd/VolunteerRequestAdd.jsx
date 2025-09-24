@@ -9,8 +9,8 @@ const VolunteerRequestAdd = () => {
   const navigate = useNavigate();
 
 
-  const [inputColor] = useState("#ebe7d1ff"); 
-  const [daysTextColor] = useState("#32564fff"); 
+  const [inputColor] = useState("#fffff9"); 
+  const [daysTextColor] = useState("#165e5d"); 
 
   const [formData, setFormData] = useState({
     full_name: "",
@@ -65,7 +65,7 @@ const VolunteerRequestAdd = () => {
     setLoading(true);
 
     try {
-      await api.post("http://127.0.0.1:8000/api/volunteer_request/add", {
+      await api.post("/volunteer_request/add", {
         ...formData,
         status: null,
         reason_of_rejection: null,

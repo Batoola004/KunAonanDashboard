@@ -67,20 +67,21 @@ const Cards = ({
 
   return (
     <ThemeProvider theme={theme}>
-      <Card sx={{ 
-        width: 300,
-        minHeight: 400, 
-        backgroundColor: '#d2b48c', 
-        display: 'flex',
-        flexDirection: 'column',
-        borderRadius: '12px',
-        boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-        transition: 'transform 0.3s, box-shadow 0.3s',
-        '&:hover': {
-          transform: 'translateY(-5px)',
-          boxShadow: '0 6px 12px rgba(0,0,0,0.15)'
-        }
-      }}>
+     <Card sx={{ 
+  width: 300,
+  minHeight: 400, 
+  backgroundColor: '#fffffe', // الخلفية بيضاء
+  display: 'flex',
+  flexDirection: 'column',
+  borderRadius: '12px',
+  border: '2px solid #165E5D', // الحواف بلون معيّن (مثلاً نفس التان)
+  boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+  transition: 'transform 0.3s, box-shadow 0.3s',
+  '&:hover': {
+    transform: 'translateY(-5px)',
+    boxShadow: '0 6px 12px rgba(0,0,0,0.15)'
+  }
+}}>
         {icon ? (
           <div style={{ 
             display: 'flex', 

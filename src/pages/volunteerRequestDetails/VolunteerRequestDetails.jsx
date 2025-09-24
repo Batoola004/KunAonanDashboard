@@ -4,6 +4,7 @@ import Sidebar from '../../components/sidebar/Sidebar';
 import Navbar from '../../components/navbar/Navbar';
 import api from '../../api/axios';
 import VolunteerInfoCard from '../../components/infoCard/InfoCard';
+import { CircularProgress } from '@mui/material';
 import './volunteerRequestDetails.scss';
 
 const VolunteerRequestDetails = () => {
@@ -72,7 +73,7 @@ const VolunteerRequestDetails = () => {
             onClick={() => updateStatus('accepted')}
             disabled={loading}
           >
-            {loading ? <span className="spinner"></span> : "قبول"}
+            {loading ? <CircularProgress size={20} color="inherit" /> : "قبول"}
           </button>
 
           <button 
@@ -80,7 +81,7 @@ const VolunteerRequestDetails = () => {
             onClick={() => setShowRejectReason(!showRejectReason)}
             disabled={loading}
           >
-            {loading ? <span className="spinner"></span> : "رفض"}
+            {loading ? <CircularProgress size={20} color="inherit" /> : "رفض"}
           </button>
         </div>
 
@@ -104,7 +105,7 @@ const VolunteerRequestDetails = () => {
               onClick={() => updateStatus('rejected')}
               disabled={loading || !rejectReasonAr.trim() || !rejectReasonEn.trim()}
             >
-              {loading ? <span className="spinner"></span> : "تأكيد الرفض"}
+              {loading ? <CircularProgress size={20} color="inherit" /> : "تأكيد الرفض"}
             </button>
           </div>
         )}

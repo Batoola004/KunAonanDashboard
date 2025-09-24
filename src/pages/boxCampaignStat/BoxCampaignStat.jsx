@@ -86,7 +86,7 @@ const BoxCampaignStat = () => {
     { name: 'إجمالي الصرفيات', value: campaignData.total_exchanges ?? 0 },
   ];
 
-  const COLORS = ['#2faeac', '#d2b48c', '#ec407a'];
+  const COLORS = ['#2faeac', '#E5D2B1', '#ec407a'];
 
   return (
     <div className="boxCampaignStat">
@@ -96,7 +96,7 @@ const BoxCampaignStat = () => {
         <Box sx={{ p: 3 }}>
           <Typography
             variant="h4"
-            sx={{ mb: 4, fontWeight: 'bold', color: '#155e5d', textAlign: 'center' }}
+            sx={{ mb: 4, fontWeight: 'bold', color: '#165e5d', textAlign: 'center' }}
           >
             {campaignData.name}
           </Typography>
@@ -105,7 +105,7 @@ const BoxCampaignStat = () => {
             <Grid item xs={12} sm={6} md={4}>
               <Paper
                 elevation={6}
-                sx={{ p: 3, textAlign: 'center', borderRadius: 3, background: 'linear-gradient(135deg, #2faeac 0%, #155e5d 100%)', color: '#fff' }}
+                sx={{ p: 3, textAlign: 'center', borderRadius: 3, background: 'linear-gradient(135deg, #2faeac 0%, #165e5d 100%)', color: '#fff' }}
               >
                 <InboxIcon sx={{ fontSize: 40, mb: 1 }} />
                 <Typography variant="h6">الرصيد الحالي</Typography>
@@ -118,7 +118,7 @@ const BoxCampaignStat = () => {
             <Grid item xs={12} sm={6} md={4}>
               <Paper
                 elevation={6}
-                sx={{ p: 3, textAlign: 'center', borderRadius: 3, background: 'linear-gradient(135deg, #d2b48c 0%, #a2835a 100%)', color: '#000' }}
+                sx={{ p: 3, textAlign: 'center', borderRadius: 3, background: 'linear-gradient(135deg, #E5D2B1 0%, #a2835a 100%)', color: '#000' }}
               >
                 <InboxIcon sx={{ fontSize: 40, mb: 1 }} />
                 <Typography variant="h6">إجمالي التبرعات</Typography>
@@ -155,7 +155,7 @@ const BoxCampaignStat = () => {
     backgroundColor: '#2faeac', 
     color: '#fff',               
     '&:hover': {
-      backgroundColor: '#155e5d'  
+      backgroundColor: '#165e5d'  
     }
   }}
 >

@@ -38,7 +38,7 @@ const VolunteerInfoCard = ({ data }) => {
     <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
       <Card sx={{ width: 800, borderRadius: 3, boxShadow: 4, bgcolor: '#ffffff' }}>
         <Box sx={{
-          bgcolor: '#155e5d',
+          bgcolor: '#165e5d',
           color: 'white',
           p: 3,
           textAlign: 'center',
@@ -49,7 +49,7 @@ const VolunteerInfoCard = ({ data }) => {
             width: 100,
             height: 100,
             mb: 2,
-            bgcolor: '#d2b48c',
+            bgcolor: '#E5D2B1',
             fontSize: '2.5rem',
             margin: '0 auto'
           }}>
@@ -66,7 +66,7 @@ const VolunteerInfoCard = ({ data }) => {
         <CardContent>
           <Stack spacing={2}>
 
-            <Typography variant="h6" color="#155e5d" sx={{ mt: 2 }}>
+            <Typography variant="h6" color="#165e5d" sx={{ mt: 2 }}>
               المعلومات الشخصية
             </Typography>
             <Divider sx={{ bgcolor: '#e0e0e0', mb: 2 }} />
@@ -81,7 +81,7 @@ const VolunteerInfoCard = ({ data }) => {
               </Box>
             </Box>
 
-            <Typography variant="h6" color="#155e5d" sx={{ mt: 3 }}>
+            <Typography variant="h6" color="#165e5d" sx={{ mt: 3 }}>
               المعلومات المهنية
             </Typography>
             <Divider sx={{ bgcolor: '#e0e0e0', mb: 2 }} />
@@ -94,7 +94,7 @@ const VolunteerInfoCard = ({ data }) => {
               </Box>
             </Box>
 
-            <Typography variant="h6" color="#155e5d" sx={{ mt: 3 }}>
+            <Typography variant="h6" color="#165e5d" sx={{ mt: 3 }}>
               معلومات التطوع
             </Typography>
             <Divider sx={{ bgcolor: '#e0e0e0', mb: 2 }} />

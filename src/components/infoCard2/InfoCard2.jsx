@@ -46,7 +46,7 @@ const BeneficiaryInfoCard = ({ data }) => {
             width: 100,
             height: 100,
             mb: 2,
-            bgcolor: '#d2b48c',
+            bgcolor: '#E5D2B1',
             fontSize: '2.5rem',
             margin: '0 auto'
           }}>
@@ -63,7 +63,7 @@ const BeneficiaryInfoCard = ({ data }) => {
         <CardContent>
           <Stack spacing={2}>
 
-            <Typography variant="h6" color="#155e5d" sx={{ mt: 2 }}>
+            <Typography variant="h6" color="#165e5d" sx={{ mt: 2 }}>
               المعلومات الشخصية
             </Typography>
             <Divider sx={{ bgcolor: '#e0e0e0', mb: 2 }} />
@@ -80,7 +80,7 @@ const BeneficiaryInfoCard = ({ data }) => {
               </Box>
             </Box>
 
-            <Typography variant="h6" color="#155e5d" sx={{ mt: 3 }}>
+            <Typography variant="h6" color="#165e5d" sx={{ mt: 3 }}>
               المعلومات التعليمية والمهنية
             </Typography>
             <Divider sx={{ bgcolor: '#e0e0e0', mb: 2 }} />
@@ -93,7 +93,7 @@ const BeneficiaryInfoCard = ({ data }) => {
               </Box>
             </Box>
 
-            <Typography variant="h6" color="#155e5d" sx={{ mt: 3 }}>
+            <Typography variant="h6" color="#165e5d" sx={{ mt: 3 }}>
               التفاصيل
             </Typography>
             <Divider sx={{ bgcolor: '#e0e0e0', mb: 2 }} />

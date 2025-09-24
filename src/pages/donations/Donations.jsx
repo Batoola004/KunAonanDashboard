@@ -51,8 +51,8 @@ const Donations = () => {
               colors={{
                 headerBg: '#155e5d',
                 headerText: '#ffffff',
-                rowBg: '#d2b48c',
-                evenRowBg: '#e7d1b4ff',
+                rowBg: '#fffffa',
+                evenRowBg: '#fffff9',
                 textColor: '#000000',
                 paperBg: '#ffffff',
                 titleColor: '#155e5d',

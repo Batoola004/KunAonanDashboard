@@ -21,10 +21,10 @@ const InfoBox = ({
   showDetailsButton = true,
   detailsButtonText = 'details',
   colors = {
-    headerBg: '#155e5d',
+    headerBg: '#165e5d',
     headerText: '#ffffff',
-    rowBg: '#d1bca0ff',
-    evenRowBg: '#d2b48c',
+    rowBg: '#fffffe',
+    evenRowBg: '#fffffd',
     textColor: '#000000',
     buttonBg: '#3c8583ff',
     buttonHover: '#155e5d',
@@ -32,25 +32,30 @@ const InfoBox = ({
     paperBg: '#ffffff',
     titleColor: '#155e5d'
   },
-  onDetailsClick 
+  onDetailsClick,
+  idField = "id"   
 }) => {
   const navigate = useNavigate();
 
-  const columns = data.length > 0 ? Object.keys(data[0]).map(key => ({
-    field: key,
-    headerName: key.replace(/_/g, ' ')
-  })) : [];
+  const columns = data.length > 0 
+    ? Object.keys(data[0]).map(key => ({
+        field: key,
+        headerName: key.replace(/_/g, ' ')
+      })) 
+    : [];
 
+  // ✅ دالة تفاصيل مرنة
   const handleDetailsClick = (row) => {
     if (onDetailsClick) {
-      onDetailsClick(row);
+      onDetailsClick(row); // يبعت الصف كامل
     } else {
-      navigate(`/details`, { state: { rowData: row } });
+      const rowId = row[idField];
+      navigate(`/details/${rowId}`);
     }
   };
 
   return (
-    <Box sx={{ p: 3, backgroundColor: '#rgba(0,0,0,0.05)', width: '100%' }}>
+    <Box sx={{ p: 3, backgroundColor: 'rgba(0,0,0,0.05)', width: '100%' }}>
       {showTitle && (
         <Typography 
           variant={titleVariant} 
@@ -82,14 +87,14 @@ const InfoBox = ({
           <TableBody>
             {data.map((row, index) => (
               <TableRow 
-                key={row.id || index}
+                key={row[idField] || index}
                 sx={{ 
                   backgroundColor: index % 2 === 0 ? colors.rowBg : colors.evenRowBg,
                   '& .MuiTableCell-root': { color: colors.textColor, whiteSpace: 'nowrap' }
                 }}
               >
                 {columns.map((column) => (
-                  <TableCell key={`${row.id || index}-${column.field}`}>
+                  <TableCell key={`${row[idField] || index}-${column.field}`}>
                     {row[column.field] !== undefined ? row[column.field] : '-'}
                   </TableCell>
                 ))}

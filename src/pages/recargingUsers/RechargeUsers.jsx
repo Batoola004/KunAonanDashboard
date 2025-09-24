@@ -19,7 +19,7 @@ const RechargeUsers = () => {
           id: user.id,
           name: user.name || 'N/A',
           phone: user.contact || 'N/A', 
-          balance: user.balance || 0 
+          balance: user.balance ?? 0 // صفر إذا ما في قيمة
         }));
         setUsers(formattedUsers);
       } catch (error) {
@@ -48,18 +48,12 @@ const RechargeUsers = () => {
   const columns = [
     { field: 'id', headerName: 'ID', width: 70, headerClassName: 'header-bold' },
     { field: 'name', headerName: 'Name', width: 180 },
-    { 
-      field: 'phone', 
-      headerName: 'Phone', 
-      width: 130, 
-      valueGetter: (params) => params?.row?.phone ?? 'N/A' 
-    },
+    { field: 'phone', headerName: 'Phone', width: 150 },
     { 
       field: 'balance', 
       headerName: 'Balance', 
-      type: 'number', 
-      width: 120, 
-      valueGetter: (params) => params?.row?.balance != null ? `${params.row.balance} $` : '0 $' 
+      width: 120,
+      renderCell: (params) => `${params.row.balance} $`  // عرض الرصيد بالدولار
     },
     {
       field: 'actions',
@@ -67,27 +61,24 @@ const RechargeUsers = () => {
       width: 150,
       sortable: false,
       filterable: false,
-      renderCell: (params) => {
-        if (!params?.row) return null;
-        return (
-          <Button
-            variant="contained"
-            size="small"
-            onClick={() => handleRechargeClick(params.row)}
-            sx={{
-              backgroundColor: '#155e5d',
-              color: 'white',
-              '&:hover': { backgroundColor: '#25706fff' },
-              fontWeight: 'bold',
-              boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
-              textTransform: 'none',
-              padding: '6px 12px',
-            }}
-          >
-            Recharge
-          </Button>
-        );
-      }
+      renderCell: (params) => (
+        <Button
+          variant="contained"
+          size="small"
+          onClick={() => handleRechargeClick(params.row)}
+          sx={{
+            backgroundColor: '#165e5d',
+            color: 'white',
+            '&:hover': { backgroundColor: '#25706fff' },
+            fontWeight: 'bold',
+            boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
+            textTransform: 'none',
+            padding: '6px 12px',
+          }}
+        >
+          Recharge
+        </Button>
+      )
     }
   ];
 
@@ -103,16 +94,16 @@ const RechargeUsers = () => {
               columns={columns}
               autoHeight
               disableRowSelectionOnClick
-              hideFooterPagination={true}
-              hideFooterSelectedRowCount={true}
+              hideFooterPagination
+              hideFooterSelectedRowCount
               localeText={{ noRowsLabel: 'No data to display' }}
               sx={{
                 '& .header-bold': { fontWeight: 'bold' },
                 '& .MuiDataGrid-virtualScroller': { overflow: 'visible', minHeight: '500px' },
                 '& .MuiDataGrid-row': {
-                  backgroundColor: '#f8f9fa',
-                  '&:nth-of-type(even)': { backgroundColor: '#d1bca0ff' },
-                  '&:nth-of-type(odd)': { backgroundColor: '#dfd4c5ff' },
+backgroundColor: 'rgba(248, 249, 250, 0.5)', // نص شفافية
+                  '&:nth-of-type(even)': { backgroundColor: '#E5D2B1' },
+                  '&:nth-of-type(odd)': { backgroundColor: '#E5D2B1' },
                   '&:hover': { backgroundColor: '#d2b48c' },
                 },
                 '& .MuiDataGrid-cell': { borderBottom: '1px solid #ced4da', color: '#495057', textAlign: 'right' },

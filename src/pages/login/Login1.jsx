@@ -7,7 +7,7 @@ function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-  const [info, setInfo] = useState(null); // لإظهار رسائل المعلومات
+  const [info, setInfo] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -55,8 +55,9 @@ function App() {
     setInfo(null);
     try {
       await api.post("/admin/forgotPassword", { email });
+      localStorage.setItem("resetEmail", email); 
       setInfo("تم إرسال كود التحقق إلى بريدك الإلكتروني");
-      setTimeout(() => navigate("/forgot-password"), 1500); // تحويل بعد 1.5 ثانية
+      setTimeout(() => navigate("/forgot-password"), 1500);
     } catch (err) {
       if (err.response) {
         setError(err.response.data.message || "فشل في إرسال البريد");

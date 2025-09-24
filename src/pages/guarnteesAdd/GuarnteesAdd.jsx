@@ -8,10 +8,12 @@ import Box from '@mui/material/Box';
 import SendBottun from '../../components/sendBottun/SendBottun';
 import ImageUploadBox from '../../components/imageBox/ImageUploadBox';
 import api from '../../api/axios';
+import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
 const GuarnteesAdd = () => {
   const [activeFilter, setActiveFilter] = useState('');
   const [categories, setCategories] = useState([]);
+  const [beneficiaries, setBeneficiaries] = useState([]);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -21,7 +23,7 @@ const GuarnteesAdd = () => {
   });
   const [loading, setLoading] = useState(false);
 
-  // جلب الفئات (Categories) من API وتعيين الفلتر الافتراضي
+  // جلب الفئات
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -31,18 +33,26 @@ const GuarnteesAdd = () => {
             ? response.data.data
             : [response.data.data];
           setCategories(dataArray);
-
-          // ضبط الفلتر الافتراضي لأول كاتيجوري موجود
-          if (dataArray.length > 0) {
-            setActiveFilter(dataArray[0].id);
-          }
+          if (dataArray.length > 0) setActiveFilter(dataArray[0].id);
         }
       } catch (error) {
-        console.error('خطأ أثناء جلب الفلاتر:', error);
+        console.error('خطأ أثناء جلب الفئات:', error);
       }
     };
-
     fetchCategories();
+  }, []);
+
+  // جلب المستفيدين
+  useEffect(() => {
+    const fetchBeneficiaries = async () => {
+      try {
+        const res = await api.get('/beneficiaries/unsorted');
+        setBeneficiaries(res.data || []);
+      } catch (err) {
+        console.error('خطأ أثناء جلب المستفيدين:', err);
+      }
+    };
+    fetchBeneficiaries();
   }, []);
 
   const handleInputChange = (e) => {
@@ -77,7 +87,6 @@ const GuarnteesAdd = () => {
 
       alert(response.data.message || 'تم إضافة الكفالة بنجاح');
 
-      // إعادة تهيئة الفورم
       setFormData({
         name: '',
         description: '',
@@ -94,7 +103,6 @@ const GuarnteesAdd = () => {
     }
   };
 
-  // إنشاء أزرار الفلترة ديناميكياً من API
   const filterButtons = categories.map(cat => ({
     text: cat.name_category_ar || cat.name,
     value: cat.id,
@@ -125,15 +133,22 @@ const GuarnteesAdd = () => {
             onChange={handleInputChange}
             name="name"
           />
-          <InputBox 
-            width="800px"
-            label="اسم المكفول"
-            color="#ffffff"
-            boxColor="#d2b48c"
-            value={formData.sponsoredName}
-            onChange={handleInputChange}
-            name="sponsoredName"
-          />
+
+          {/* Dropdown لاختيار المكفول */}
+          <FormControl sx={{ width: '800px', mt: 2 }}>
+            <InputLabel>اختر المكفول</InputLabel>
+            <Select
+              value={formData.sponsoredName}
+              label="اختر المكفول"
+              onChange={(e) => setFormData(prev => ({ ...prev, sponsoredName: e.target.value }))}
+            >
+              {beneficiaries.map(b => (
+                <MenuItem key={b.beneficiary_id} value={b.name}>
+                  {b.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </div>
 
         <div className="formSection">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import "./campaign.scss";
 import Sidebar from '../../components/sidebar/Sidebar';
 import Navbar from '../../components/navbar/Navbar';
@@ -7,9 +7,6 @@ import CardList from '../../components/cardList/CardList';
 import api from '../../api/axios';
 import { useNavigate } from 'react-router-dom';
 import { CircularProgress, Box, Alert } from '@mui/material';
-
-// أيقونات MUI 👇
-import { LocalHospital, Handyman, MenuBook, VolunteerActivism } from "@mui/icons-material";
 
 const Campaign = () => {
   const [cardsData, setCardsData] = useState([]);
@@ -22,7 +19,7 @@ const Campaign = () => {
     let url = '/campaigns/getAll';
 
     if (filter !== 'all') {
-      const categoryMap = { Health: 1, Build: 2, Education: 3 };
+      const categoryMap = { Health: 2, Build: 1, Education: 3 };
       const categoryId = categoryMap[filter];
       url = `/campaigns/category/${categoryId}`;
     }
@@ -30,32 +27,13 @@ const Campaign = () => {
     try {
       const res = await api.get(url);
 
-      const formattedData = res.data?.data?.map(campaign => {
-        let icon;
-
-        // ربط الأيقونات بالتصنيفات
-        switch (campaign.category) {
-          case "Health":
-            icon = <LocalHospital sx={{ fontSize: 80, color: "red" }} />;
-            break;
-          case "Build":
-            icon = <Handyman sx={{ fontSize: 80, color: "green" }} />;
-            break;
-          case "Education":
-            icon = <MenuBook sx={{ fontSize: 80, color: "blue" }} />;
-            break;
-          default:
-            icon = <VolunteerActivism sx={{ fontSize: 80, color: "#155e5d" }} />;
-        }
-
-        return {
-          id: campaign.id,
-          title: campaign.title,
-          description: campaign.description,
-          icon: icon, // 👈 نستعمل الأيقونة بدل الصورة
-          isActive: campaign.status === 'active'
-        };
-      }) || [];
+      const formattedData = res.data?.data?.map(campaign => ({
+        id: campaign.id,
+        title: campaign.title,
+        description: campaign.description,
+        // تم إزالة الصورة
+        isActive: campaign.status === 'active'
+      })) || [];
 
       setCardsData(formattedData);
     } catch (err) {
@@ -72,8 +50,8 @@ const Campaign = () => {
 
   const filterButtons = [
     { text: "All", value: "all", onClick: () => { setActiveFilter('all'); fetchCampaigns('all'); } },
-    { text: "Health", value: "Health", onClick: () => { setActiveFilter('Health'); fetchCampaigns('Health'); } },
     { text: "Build", value: "Build", onClick: () => { setActiveFilter('Build'); fetchCampaigns('Build'); } },
+    { text: "Health", value: "Health", onClick: () => { setActiveFilter('Health'); fetchCampaigns('Health'); } },
     { text: "Education", value: "Education", onClick: () => { setActiveFilter('Education'); fetchCampaigns('Education'); } }
   ];
 
@@ -104,6 +82,7 @@ const Campaign = () => {
             cardsData={cardsData}
             onCardClick={handleCardClick}
             setCardsData={setCardsData}
+            // تم إزالة الخاصية showImages
           />
         )}
       </div>
