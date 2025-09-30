@@ -224,6 +224,31 @@ const Sidebar = () => {
             </>
           )}
 
+          
+ <div className="section-header" onClick={() => toggleSection('inkind')}>
+  <div className="title-wrapper">
+    <p className="title">InKind Donations</p>
+    {expandedSections.inkind ? 
+      <ExpandLessIcon className="expand-icon" /> : 
+      <ExpandMoreIcon className="expand-icon" />}
+  </div>
+</div>
+{expandedSections.inkind && (
+
+<>
+  {/* inkind */}
+          <li onClick={() => handleNavigation('/inkindRequests')}>
+            <MenuIcon className='icon'/>
+            <span>Requests</span>
+          </li>
+          {/* <li onClick={() => handleNavigation('/reportsAdd')}>
+            <AddBoxIcon className='icon'/>
+            <span>Create report</span>
+          </li> */}
+
+        
+</>)}
+
           {/*recharge card */}
 <div className="section-header" onClick={() => toggleSection('recharge')}>
   <div className="title-wrapper">
