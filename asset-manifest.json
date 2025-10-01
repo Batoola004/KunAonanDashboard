@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/KunAonanDashboard/static/css/main.7fde6847.css",
+    "main.js": "/KunAonanDashboard/static/js/main.bd299e02.js",
+    "static/media/5.png": "/KunAonanDashboard/static/media/5.9425dfa74d2e21f07d78.png",
+    "index.html": "/KunAonanDashboard/index.html",
+    "main.7fde6847.css.map": "/KunAonanDashboard/static/css/main.7fde6847.css.map",
+    "main.bd299e02.js.map": "/KunAonanDashboard/static/js/main.bd299e02.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7fde6847.css",
+    "static/js/main.bd299e02.js"
+  ]
+}
